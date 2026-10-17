@@ -46,7 +46,7 @@ export function StatesPage() {
             {t("moduleRefresh")}
           </Button>
         </div>
-        {read.isPending || read.data?.busy ? <p role="status">{t("operationBusy")}</p> : null}
+        {read.isPending || read.data?.busy ? <p role="status">{t("working")}</p> : null}
         {read.isError ? (
           <p role="alert">{t(errorMessage(read.error))}</p>
         ) : vault?.unlocked === false ? (

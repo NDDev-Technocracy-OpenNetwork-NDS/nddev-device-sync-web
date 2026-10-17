@@ -74,7 +74,9 @@ export function VaultPage() {
           <CardDescription>{t("browserVaultHelp")}</CardDescription>
         </CardHeader>
         <CardContent className="stack">
-          {read.isError ? (
+          {read.isPending ? (
+            <p role="status">{t("working")}</p>
+          ) : read.isError ? (
             <p role="alert">{t(errorMessage(read.error))}</p>
           ) : (
             <p>{unlocked ? t("vaultUnlocked") : t("vaultLocked")}</p>
@@ -185,7 +187,7 @@ export function VaultPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="stack">
-              {read.data?.busy && <p role="status">{t("operationBusy")}</p>}
+              {read.data?.busy && <p role="status">{t("working")}</p>}
               {records?.items.map((record) => (
                 <div className="record stack" key={record.id}>
                   <strong>{record.title}</strong>
