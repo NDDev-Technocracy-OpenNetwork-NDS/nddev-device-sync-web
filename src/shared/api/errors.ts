@@ -35,6 +35,7 @@ const messages: Readonly<Record<string, SimpleMessageKey>> = {
   vault_busy: "rateError",
   vault_cancelled: "cancelledError",
   vault_key_registration_required: "vaultRegistrationRequired",
+  sync_capacity_exhausted: "serverCapacityExhausted",
 };
 export function errorMessage(error: unknown): SimpleMessageKey {
   return error instanceof Error && Object.hasOwn(messages, error.message)

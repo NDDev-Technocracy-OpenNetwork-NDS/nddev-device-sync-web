@@ -1,76 +1,30 @@
-import {
-  new_vault_record_id,
-  type RecordPage,
-  type RecordView,
-  type VaultView,
-} from "@nds/runtime";
+import { new_vault_record_id, type RecordView } from "@nds/runtime";
 import { useForm } from "@tanstack/react-form";
-import { queryOptions, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Link } from "@tanstack/react-router";
 import { useRef, useState } from "react";
 import { errorMessage } from "@/shared/api/errors";
 import { useRuntime } from "@/shared/api/runtime";
+import { useReplicaPage } from "@/shared/api/use-replica-page";
 import { useText } from "@/shared/i18n";
+import { formatTimestamp } from "@/shared/i18n/timestamp";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
 
-type VaultRead = { vault: VaultView; records: RecordPage | null; busy: boolean };
-function localBusy(error: unknown): boolean {
-  return error instanceof Error && error.message === "vault_busy";
-}
 export function VaultPage() {
-  const { client, scope, busy, run } = useRuntime();
+  const { client, busy } = useRuntime();
   const { t, locale } = useText();
-  const cache = useQueryClient();
   const [after, setAfter] = useState("");
   const [editing, setEditing] = useState<RecordView | null>(null);
   const [draftId, setDraftId] = useState(new_vault_record_id);
   const secret = useRef<HTMLInputElement>(null);
-  const key = ["vault", scope, after];
-  const options = queryOptions({
-    queryKey: key,
-    queryFn: async (): Promise<VaultRead> => {
-      const previous = cache.getQueryData<VaultRead>(key);
-      let metadata: VaultView;
-      try {
-        metadata = await client.vault_snapshot();
-      } catch (error) {
-        if (localBusy(error) && previous) return { ...previous, busy: true };
-        throw error;
-      }
-      if (!metadata.unlocked) return { vault: metadata, records: null, busy: false };
-      const prior = previous?.vault.key_id === metadata.key_id ? previous.records : null;
-      if (
-        prior &&
-        prior.local_revision === metadata.local_revision &&
-        prior.observed_seq === metadata.cursor
-      ) {
-        return { vault: metadata, records: prior, busy: false };
-      }
-      // A failed read never marks a revision as loaded. The next visible tick retries it.
-      try {
-        return { vault: metadata, records: await client.vault_records(after), busy: false };
-      } catch (error) {
-        if (localBusy(error)) return { vault: metadata, records: prior ?? null, busy: true };
-        throw error;
-      }
-    },
-  });
-  const read = useQuery({ ...options, enabled: !busy, refetchInterval: 1000 });
+  const { read, command, reload } = useReplicaPage("vault", after, (client, cursor) =>
+    client.vault_records(cursor),
+  );
   const vault = read.data?.vault;
-  const records = read.data?.records;
+  const records = read.data?.page;
   const unlocked = !read.isError && vault?.unlocked === true;
-  async function reload() {
-    await cache.invalidateQueries({ queryKey: ["vault", scope] });
-  }
-  function command(action: () => Promise<unknown>) {
-    return run(async () => {
-      // Settle the one presentation read before mutation; Rust checks fresh authority itself.
-      await cache.fetchQuery(options).catch(() => undefined);
-      await action();
-    });
-  }
   const form = useForm({
     defaultValues: { title: "", username: "" },
     onSubmit: async ({ value }) => {
@@ -110,13 +64,6 @@ export function VaultPage() {
   function act(action: () => Promise<unknown>) {
     void command(action).then(reload);
   }
-  function syncTime(value: bigint): string {
-    const millis = Number(value * 1000n);
-    const date = new Date(millis);
-    return Number.isSafeInteger(millis) && Number.isFinite(date.getTime())
-      ? date.toLocaleString(locale)
-      : value.toString();
-  }
   return (
     <div className="stack">
       <Card>
@@ -140,7 +87,9 @@ export function VaultPage() {
                   ? t("syncCatchingUp")
                   : vault.last_sync_at === 0n
                     ? t("syncNotObserved")
-                    : t("syncLastSeen", { time: syncTime(vault.last_sync_at) })}
+                    : t("syncLastSeen", {
+                        time: formatTimestamp(vault.last_sync_at * 1000n, locale),
+                      })}
               </p>
               {vault.browser_persistent !== null && (
                 <p className="notice">
@@ -157,6 +106,9 @@ export function VaultPage() {
           <Button disabled={busy} onClick={() => act(() => client.vault_sync())}>
             {t("vaultSync")}
           </Button>
+          <nav className="actions" aria-label={t("vaultTitle")}>
+            <Link to="/states">{t("syncedState")}</Link>
+          </nav>
         </CardContent>
       </Card>
       {unlocked && (

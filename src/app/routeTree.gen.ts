@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CompanyRouteImport } from './routes/company'
 import { Route as PasskeysRouteImport } from './routes/passkeys'
+import { Route as StatesRouteImport } from './routes/states'
 import { Route as VaultRouteImport } from './routes/vault'
 
 const IndexRoute = IndexRouteImport.update({
@@ -29,6 +30,11 @@ const PasskeysRoute = PasskeysRouteImport.update({
   path: '/passkeys',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StatesRoute = StatesRouteImport.update({
+  id: '/states',
+  path: '/states',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const VaultRoute = VaultRouteImport.update({
   id: '/vault',
   path: '/vault',
@@ -39,12 +45,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/company': typeof CompanyRoute
   '/passkeys': typeof PasskeysRoute
+  '/states': typeof StatesRoute
   '/vault': typeof VaultRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/company': typeof CompanyRoute
   '/passkeys': typeof PasskeysRoute
+  '/states': typeof StatesRoute
   '/vault': typeof VaultRoute
 }
 export interface FileRoutesById {
@@ -52,20 +60,22 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/company': typeof CompanyRoute
   '/passkeys': typeof PasskeysRoute
+  '/states': typeof StatesRoute
   '/vault': typeof VaultRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/company' | '/passkeys' | '/vault'
+  fullPaths: '/' | '/company' | '/passkeys' | '/states' | '/vault'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/company' | '/passkeys' | '/vault'
-  id: '__root__' | '/' | '/company' | '/passkeys' | '/vault'
+  to: '/' | '/company' | '/passkeys' | '/states' | '/vault'
+  id: '__root__' | '/' | '/company' | '/passkeys' | '/states' | '/vault'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CompanyRoute: typeof CompanyRoute
   PasskeysRoute: typeof PasskeysRoute
+  StatesRoute: typeof StatesRoute
   VaultRoute: typeof VaultRoute
 }
 
@@ -92,6 +102,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PasskeysRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/states': {
+      id: '/states'
+      path: '/states'
+      fullPath: '/states'
+      preLoaderRoute: typeof StatesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/vault': {
       id: '/vault'
       path: '/vault'
@@ -106,6 +123,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CompanyRoute: CompanyRoute,
   PasskeysRoute: PasskeysRoute,
+  StatesRoute: StatesRoute,
   VaultRoute: VaultRoute,
 }
 export const routeTree = rootRouteImport
