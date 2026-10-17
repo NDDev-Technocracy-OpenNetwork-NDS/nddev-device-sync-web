@@ -13,7 +13,7 @@ concurrency:
 env:
   GH_TOKEN: ${{ github.token }}
 jobs:
-  quality:
+  flutter-baseline:
     runs-on: ubuntu-24.04
     timeout-minutes: 35
     steps:
@@ -25,11 +25,7 @@ jobs:
           python-version: '3.15.0'
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
         with:
-          node-version: '24.22.0'
-          cache: npm
-      - run: npm ci --ignore-scripts
-      - run: npx playwright install --with-deps chromium
-      - run: npm test
+          node-version-file: package.json
       - id: desktop
         run: python scripts/desktop-source.py
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
@@ -48,3 +44,37 @@ jobs:
       - run: node --check web/nds-bootstrap.js
       - run: python scripts/build.py
       - run: python scripts/check-artifact.py build/web
+  react:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.15.0'
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version-file: package.json
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6
+        with:
+          bun-version-file: package.json
+      - run: bun install --frozen-lockfile --ignore-scripts
+      - run: bun run lint
+      - run: bun run typecheck
+      - run: bun run check:worker
+      - run: bunx playwright install --with-deps chromium
+      - run: bun run test:worker
+      - run: rustup toolchain install 1.99.1 --profile minimal --target wasm32-unknown-unknown
+      - run: cargo +1.99.1 install wasm-bindgen-cli --version 0.2.129 --locked
+      - run: bun run build
+        env:
+          NDS_NATIVE_BUILD_HOME: ${{ runner.temp }}/nds-native
+      - run: python scripts/check-artifact.py build/react
+  quality:
+    if: always()
+    needs: [flutter-baseline, react]
+    runs-on: ubuntu-24.04
+    steps:
+      - run: test '${{ needs.flutter-baseline.result }}' = success && test '${{ needs.react.result }}' = success

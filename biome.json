@@ -1,0 +1,10 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.5.15/schema.json",
+  "files": {
+    "includes": ["src/**", "scripts/*.ts", "vite.config.ts", "!src/**/*.gen.ts", "!src/shared/api/generated/**", "!src/shared/design/**"]
+  },
+  "formatter": { "indentStyle": "space", "indentWidth": 2, "lineWidth": 100 },
+  "linter": { "enabled": true, "rules": { "recommended": true } },
+  "javascript": { "formatter": { "quoteStyle": "double" } }
+  ,"css": { "parser": { "tailwindDirectives": true } }
+}
