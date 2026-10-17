@@ -19,6 +19,9 @@ shared Rust lockfile. Run `bun install --frozen-lockfile --ignore-scripts`,
 `just check` and `just build`. Builds require committed source and reject generated
 drift. Sources are fetched by immutable SHA into `.nds-cache`; optional
 `NDS_SHARED_SOURCE`/`NDS_DESIGN_SOURCE` paths must be clean at those exact commits.
+WASM declarations are generated per compiled binary before TypeScript checks;
+profile-specific runtime exports are build artifacts. `just check` prepares a
+development artifact, while `just build` validates the production artifact.
 
 The worker acceptance uses the Node and Playwright versions pinned in `package.json`. Run
 `bunx playwright install chromium` and

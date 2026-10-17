@@ -3,8 +3,8 @@ set shell := ["bash", "-euo", "pipefail", "-c"]
 check:
     bun install --frozen-lockfile --ignore-scripts
     bun run lint
-    bun run typecheck
     bun run check:worker
+    bun run build --development-http
     bun run scripts/generate-presentation.ts --check
 
 baseline-check:

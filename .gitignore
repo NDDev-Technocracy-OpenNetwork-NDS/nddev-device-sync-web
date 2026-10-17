@@ -60,4 +60,5 @@ __pycache__/
 /public/fonts/
 /public/nddev-mark.svg
 /src/shared/design/
+/src/shared/api/generated/
 /.nds-cache/
