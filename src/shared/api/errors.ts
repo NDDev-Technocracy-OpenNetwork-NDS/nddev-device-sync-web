@@ -36,13 +36,6 @@ const messages: Readonly<Record<string, SimpleMessageKey>> = {
   vault_cancelled: "cancelledError",
   vault_key_registration_required: "vaultRegistrationRequired",
   sync_capacity_exhausted: "serverCapacityExhausted",
-  clipboard_busy: "operationBusy",
-  clipboard_private: "clipboardRejected",
-  clipboard_unsupported: "clipboardRejected",
-  clipboard_too_large: "clipboardRejected",
-  clipboard_permission_denied: "clipboardUnavailable",
-  clipboard_unavailable: "clipboardUnavailable",
-  telemetry_unavailable: "telemetryUnavailable",
 };
 export function errorMessage(error: unknown): SimpleMessageKey {
   return error instanceof Error && Object.hasOwn(messages, error.message)
