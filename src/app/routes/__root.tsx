@@ -1,4 +1,4 @@
-import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
+import { createRootRoute, Link, Outlet, useMatch } from "@tanstack/react-router";
 import { lazy, Suspense } from "react";
 import { Approval } from "@/pages/session/approval";
 import { useRuntime } from "@/shared/api/runtime";
@@ -12,6 +12,7 @@ export const Route = createRootRoute({ component: Layout });
 function Layout() {
   const { view, error, busy, scope, invitation } = useRuntime();
   const { locale, setLocale, t } = useText();
+  const diagnostics = useMatch({ from: "/diagnostics", shouldThrow: false }) !== undefined;
   return (
     <div className="app-shell stack">
       <header className="app-header">
@@ -26,16 +27,19 @@ function Layout() {
           <option value="ru">Русский</option>
         </select>
       </header>
-      {view.authenticated && (
-        <nav className="actions" aria-label={t("appTitle")}>
-          <Link to="/" activeOptions={{ exact: true }}>
-            {t("sessionTab")}
-          </Link>
-          <Link to="/company">{t("companyTitle")}</Link>
-          <Link to="/vault">{t("vaultTitle")}</Link>
-          <Link to="/passkeys">{t("passkeysTitle")}</Link>
-        </nav>
-      )}
+      <nav className="actions" aria-label={t("appTitle")}>
+        <Link to="/" activeOptions={{ exact: true }}>
+          {view.authenticated ? t("sessionTab") : t("signIn")}
+        </Link>
+        {view.authenticated && (
+          <>
+            <Link to="/company">{t("companyTitle")}</Link>
+            <Link to="/vault">{t("vaultTitle")}</Link>
+            <Link to="/passkeys">{t("passkeysTitle")}</Link>
+          </>
+        )}
+        <Link to="/diagnostics">{t("moduleDiagnostics")}</Link>
+      </nav>
       {error && (
         <p role="alert" className="notice">
           {t(error)}
@@ -52,7 +56,7 @@ function Layout() {
       {busy && <p role="status">{t("working")}</p>}
       <main key={scope} className="stack">
         {view.authorization_url && <Approval key={view.authorization_url} />}
-        {view.authenticated ? (
+        {view.authenticated || diagnostics ? (
           <Outlet />
         ) : (
           <Suspense fallback={<p role="status">{t("working")}</p>}>

@@ -1,4 +1,9 @@
-import type { ClientLifecycle, NdsClient, View } from "@nds/runtime";
+import {
+  type ClientLifecycle,
+  type NdsClient,
+  record_client_lifecycle,
+  type View,
+} from "@nds/runtime";
 import { useQueryClient } from "@tanstack/react-query";
 import {
   createContext,
@@ -92,6 +97,7 @@ export function RuntimeProvider({
     [client, observe],
   );
   useEffect(() => {
+    record_client_lifecycle("Ready");
     let ticks = 0;
     function lifecycle() {
       const state: ClientLifecycle =
