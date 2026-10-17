@@ -108,6 +108,7 @@ export function VaultPage() {
           </Button>
           <nav className="actions" aria-label={t("vaultTitle")}>
             <Link to="/states">{t("syncedState")}</Link>
+            <Link to="/clipboard">{t("sharedClipboard")}</Link>
           </nav>
         </CardContent>
       </Card>

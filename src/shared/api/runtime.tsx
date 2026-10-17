@@ -20,7 +20,11 @@ interface Runtime {
   busy: boolean;
   error: SimpleMessageKey | null;
   invitation: InvitationState;
-  run: (action: () => Promise<unknown>, enroll?: boolean) => Promise<boolean>;
+  run: (
+    action: () => Promise<unknown>,
+    enroll?: boolean,
+    describeError?: (error: unknown) => SimpleMessageKey,
+  ) => Promise<boolean>;
   observe: () => void;
 }
 export type InvitationState = "none" | "received" | "invalid";
@@ -58,7 +62,7 @@ export function RuntimeProvider({
     if (next.invitation_pending) setInvitation("none");
   }, [client, cache]);
   const run = useCallback(
-    async (action: () => Promise<unknown>, enroll = false) => {
+    async (action: () => Promise<unknown>, enroll = false, describeError = errorMessage) => {
       if (inAction.current) return false;
       inAction.current = true;
       setBusy(true);
@@ -77,7 +81,7 @@ export function RuntimeProvider({
         }
         return true;
       } catch (error) {
-        setError(errorMessage(error));
+        setError(describeError(error));
         return false;
       } finally {
         observe();

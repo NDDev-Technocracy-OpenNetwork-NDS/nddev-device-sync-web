@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ClipboardRouteImport } from './routes/clipboard'
 import { Route as CompanyRouteImport } from './routes/company'
 import { Route as PasskeysRouteImport } from './routes/passkeys'
 import { Route as StatesRouteImport } from './routes/states'
@@ -18,6 +19,11 @@ import { Route as VaultRouteImport } from './routes/vault'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClipboardRoute = ClipboardRouteImport.update({
+  id: '/clipboard',
+  path: '/clipboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CompanyRoute = CompanyRouteImport.update({
@@ -43,6 +49,7 @@ const VaultRoute = VaultRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/clipboard': typeof ClipboardRoute
   '/company': typeof CompanyRoute
   '/passkeys': typeof PasskeysRoute
   '/states': typeof StatesRoute
@@ -50,6 +57,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/clipboard': typeof ClipboardRoute
   '/company': typeof CompanyRoute
   '/passkeys': typeof PasskeysRoute
   '/states': typeof StatesRoute
@@ -58,6 +66,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/clipboard': typeof ClipboardRoute
   '/company': typeof CompanyRoute
   '/passkeys': typeof PasskeysRoute
   '/states': typeof StatesRoute
@@ -65,14 +74,23 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/company' | '/passkeys' | '/states' | '/vault'
+  fullPaths:
+    '/' | '/clipboard' | '/company' | '/passkeys' | '/states' | '/vault'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/company' | '/passkeys' | '/states' | '/vault'
-  id: '__root__' | '/' | '/company' | '/passkeys' | '/states' | '/vault'
+  to: '/' | '/clipboard' | '/company' | '/passkeys' | '/states' | '/vault'
+  id:
+    | '__root__'
+    | '/'
+    | '/clipboard'
+    | '/company'
+    | '/passkeys'
+    | '/states'
+    | '/vault'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ClipboardRoute: typeof ClipboardRoute
   CompanyRoute: typeof CompanyRoute
   PasskeysRoute: typeof PasskeysRoute
   StatesRoute: typeof StatesRoute
@@ -86,6 +104,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/clipboard': {
+      id: '/clipboard'
+      path: '/clipboard'
+      fullPath: '/clipboard'
+      preLoaderRoute: typeof ClipboardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/company': {
@@ -121,6 +146,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ClipboardRoute: ClipboardRoute,
   CompanyRoute: CompanyRoute,
   PasskeysRoute: PasskeysRoute,
   StatesRoute: StatesRoute,
