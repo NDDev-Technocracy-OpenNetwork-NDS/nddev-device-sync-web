@@ -157,7 +157,7 @@ export function SignIn() {
         )}
         {view.authorization_url && (
           <div className="stack">
-            <p>{t("githubHelp")}</p>
+            <p>{t(view.flow === "github" ? "githubHelp" : "passkeyHelp")}</p>
             <strong>{view.verification_code}</strong>
             <a
               className="notice"
@@ -166,7 +166,7 @@ export function SignIn() {
               rel="noopener noreferrer"
               onClick={() => setOpened(true)}
             >
-              {t("openGithub")}
+              {t(view.flow === "github" ? "openGithub" : "openPasskey")}
             </a>
             {opened && <p role="status">{t("awaitApproval")}</p>}
           </div>
