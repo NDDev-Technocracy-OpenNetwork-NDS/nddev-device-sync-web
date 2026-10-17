@@ -1,5 +1,5 @@
 import { useForm } from "@tanstack/react-form";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { useRuntime } from "@/shared/api/runtime";
 import { useText } from "@/shared/i18n";
 import { Button } from "@/shared/ui/button";
@@ -11,11 +11,9 @@ export function SignIn() {
   const { client, view, busy, run, observe } = useRuntime();
   const { t, locale } = useText();
   const code = useRef<HTMLInputElement>(null);
-  const [opened, setOpened] = useState(false);
   const form = useForm({
     defaultValues: { email: "" },
     onSubmit: async ({ value }) => {
-      setOpened(false);
       await run(() => client.request_email(value.email, locale));
     },
   });
@@ -30,41 +28,6 @@ export function SignIn() {
       }, true);
     },
   });
-  useEffect(() => {
-    if (!opened) return;
-    let timer: number | undefined;
-    let disposed = false;
-    function schedule() {
-      clearTimeout(timer);
-      const current = client.snapshot();
-      if (
-        disposed ||
-        document.visibilityState === "hidden" ||
-        !["github", "passkey", "passkey_registration"].includes(current.flow) ||
-        current.expires_in_seconds === 0
-      )
-        return;
-      timer = window.setTimeout(
-        async () => {
-          if (document.visibilityState !== "hidden") {
-            await run(
-              () => (current.flow === "github" ? client.poll_github() : client.poll_passkey()),
-              true,
-            );
-          }
-          schedule();
-        },
-        Math.min(30, Math.max(1, current.retry_after_seconds)) * 1000,
-      );
-    }
-    schedule();
-    document.addEventListener("visibilitychange", schedule);
-    return () => {
-      disposed = true;
-      clearTimeout(timer);
-      document.removeEventListener("visibilitychange", schedule);
-    };
-  }, [opened, client, run]);
   return (
     <Card>
       <CardHeader>
@@ -111,7 +74,6 @@ export function SignIn() {
               variant="outline"
               disabled={busy || !view.passkey_available}
               onClick={() => {
-                setOpened(false);
                 void run(() => client.start_passkey(false, form.state.values.email, locale));
               }}
             >
@@ -122,7 +84,6 @@ export function SignIn() {
               variant="outline"
               disabled={busy || !view.github_available}
               onClick={() => {
-                setOpened(false);
                 void run(() => client.start_github(locale));
               }}
             >
@@ -155,30 +116,13 @@ export function SignIn() {
             </Button>
           </form>
         )}
-        {view.authorization_url && (
-          <div className="stack">
-            <p>{t(view.flow === "github" ? "githubHelp" : "passkeyHelp")}</p>
-            <strong>{view.verification_code}</strong>
-            <a
-              className="notice"
-              href={view.authorization_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => setOpened(true)}
-            >
-              {t(view.flow === "github" ? "openGithub" : "openPasskey")}
-            </a>
-            {opened && <p role="status">{t("awaitApproval")}</p>}
-          </div>
-        )}
-        {view.flow && (
+        {view.flow === "email" && (
           <div className="actions">
             <p>{t("validFor", { seconds: view.expires_in_seconds })}</p>
             <Button
               variant="outline"
               disabled={busy}
               onClick={() => {
-                setOpened(false);
                 client.cancel();
                 if (code.current) code.current.value = "";
                 observe();

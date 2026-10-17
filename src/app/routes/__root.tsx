@@ -1,5 +1,6 @@
 import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
 import { lazy, Suspense } from "react";
+import { Approval } from "@/pages/session/approval";
 import { useRuntime } from "@/shared/api/runtime";
 import { useText } from "@/shared/i18n";
 
@@ -32,6 +33,7 @@ function Layout() {
           </Link>
           <Link to="/company">{t("companyTitle")}</Link>
           <Link to="/vault">{t("vaultTitle")}</Link>
+          <Link to="/passkeys">{t("passkeysTitle")}</Link>
         </nav>
       )}
       {error && (
@@ -48,7 +50,8 @@ function Layout() {
         <p className="notice">{t("invitationSignOut")}</p>
       )}
       {busy && <p role="status">{t("working")}</p>}
-      <main key={scope}>
+      <main key={scope} className="stack">
+        {view.authorization_url && <Approval key={view.authorization_url} />}
         {view.authenticated ? (
           <Outlet />
         ) : (
