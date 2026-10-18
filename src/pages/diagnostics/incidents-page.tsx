@@ -43,10 +43,18 @@ export function IncidentsPage() {
             void read.refetch();
           }}
         >
-          {t("refresh")}
+          {t("moduleRefresh")}
         </Button>
         {read.isFetching && <p role="status">{t("working")}</p>}
-        {read.isError && <p role="alert">{t("incidentsUnavailable")}</p>}
+        {read.isError && (
+          <p role="alert">
+            {t(
+              read.error instanceof Error && read.error.message === "busy"
+                ? "operationBusy"
+                : "incidentsUnavailable",
+            )}
+          </p>
+        )}
         {read.data && (
           <p>
             {t("incidentsObserved", {
@@ -65,6 +73,12 @@ export function IncidentsPage() {
                 occurrences: incident.occurrences,
               })}
             </p>
+            {incident.silenced_until && (
+              <p>
+                {t("silenceIncident")} · {t("expires")}:{" "}
+                {new Date(incident.silenced_until).toLocaleString(locale)}
+              </p>
+            )}
             {incident.state !== "resolved" && (
               <div className="actions">
                 <Button disabled={disabled} onClick={() => act(incident, 0)}>
