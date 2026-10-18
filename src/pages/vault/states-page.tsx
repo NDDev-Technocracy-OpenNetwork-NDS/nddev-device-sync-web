@@ -4,6 +4,7 @@ import { errorMessage } from "@/shared/api/errors";
 import { useRuntime } from "@/shared/api/runtime";
 import { useReplicaPage } from "@/shared/api/use-replica-page";
 import { useText } from "@/shared/i18n";
+import { permissionLabel } from "@/shared/i18n/modules";
 import { formatTimestamp } from "@/shared/i18n/timestamp";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
@@ -62,7 +63,7 @@ export function StatesPage() {
                 <h3>
                   {item.kind === "device_state"
                     ? t("stateDevices")
-                    : item.kind === "module_state"
+                    : item.kind === "module_state" || item.kind === "module_configuration"
                       ? t("module")
                       : t("sessionTitle")}
                 </h3>
@@ -99,6 +100,16 @@ export function StatesPage() {
                             ? t("providerUnavailable")
                             : t("notChecked")}
                   </p>
+                )}
+                {item.kind === "module_configuration" && (
+                  <div className="stack">
+                    <p>
+                      {t("moduleEnabled")}: {t(item.enabled ? "checkOk" : "checkError")}
+                    </p>
+                    {item.permissions.map((permission) => (
+                      <p key={permission}>{t(permissionLabel(permission))}</p>
+                    ))}
+                  </div>
                 )}
                 <p>{t("vaultRevision", { revision: item.revision.toString() })}</p>
                 {item.pending_id && <p>{t("vaultRecordPending")}</p>}

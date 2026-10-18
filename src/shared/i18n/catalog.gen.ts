@@ -184,11 +184,26 @@ export const en = {
   "module": "Module",
   "moduleCancel": "Cancel request",
   "moduleCancelled": "Request cancelled.",
+  "moduleConfigurationConflict": "Module settings conflict. No permission is granted until the conflict is resolved.",
+  "moduleDeviceRequired": "Sign in and register this device to manage modules.",
   "moduleDiagnostics": "Diagnostics",
+  "moduleDisabled": "Enable this module to use its features.",
+  "moduleEnabled": "Module enabled",
   "moduleInputError": "Check the repository path or selected entry.",
+  "moduleInstallationUnknown": "Availability has not been checked",
+  "moduleInstalled": "Available on this device",
+  "moduleManagementHelp": "Enable modules and choose their NDS permissions for this device. System or browser consent is still required when a feature uses it.",
+  "moduleMetadataError": "Module settings could not be refreshed. The last operation result is unchanged.",
   "moduleNetworkError": "The local tool did not respond in time.",
+  "moduleNotInstalled": "The required local tool is not installed or has not been found.",
+  "modulePermissionRequired": "Choose the required NDS permissions before using this feature.",
+  "modulePermissions": "NDS permissions",
   "moduleRefresh": "Refresh",
+  "moduleReloadDraft": "Reload settings",
   "moduleResponseError": "The local tool returned an unsupported response.",
+  "moduleSave": "Save module settings",
+  "moduleSaved": "Settings saved on this device; synchronization continues separately.",
+  "moduleSettingsChanged": "Module settings changed. Refresh the form before saving your choice.",
   "moreIncidents": "Next incidents",
   "networkError": "The server could not be reached. No fresh session state is confirmed.",
   "networkReceive": "Network receive rate",
@@ -213,6 +228,12 @@ export const en = {
   "passkeysEmpty": "No passkeys registered.",
   "passkeysHelp": "Removing a passkey ends sessions created with it. Removal requires signing in within the last five minutes.",
   "passkeysTitle": "Your passkeys",
+  "permissionClipboard": "Use clipboard features",
+  "permissionCredentialStore": "Use protected credential references",
+  "permissionLocalNetwork": "Communicate with the declared service",
+  "permissionProcessExecution": "Run the declared local tool",
+  "permissionReadOnly": "Read local information",
+  "permissionUserService": "Use the current user service",
   "preview": "Preview",
   "privacy": "Session credentials and vault keys stay in native secure storage. The server delivers your vault key after verified sign-in and device enrollment.",
   "providerFailed": "The local tool could not complete this request.",
@@ -521,11 +542,26 @@ export const ru = {
   "module": "Модуль",
   "moduleCancel": "Отменить запрос",
   "moduleCancelled": "Запрос отменён.",
+  "moduleConfigurationConflict": "Конфликт настроек модуля. До его разрешения доступ не предоставляется.",
+  "moduleDeviceRequired": "Войдите и зарегистрируйте это устройство для управления модулями.",
   "moduleDiagnostics": "Диагностика",
+  "moduleDisabled": "Включите модуль, чтобы использовать его возможности.",
+  "moduleEnabled": "Модуль включён",
   "moduleInputError": "Проверьте путь репозитория или выбранную запись.",
+  "moduleInstallationUnknown": "Доступность ещё не проверена",
+  "moduleInstalled": "Доступен на этом устройстве",
+  "moduleManagementHelp": "Включайте модули и выбирайте их разрешения NDS для этого устройства. Для доступа к возможностям системы или браузера по-прежнему требуется их собственное разрешение.",
+  "moduleMetadataError": "Не удалось обновить сведения о модулях. Результат последней операции не изменён.",
   "moduleNetworkError": "Локальный инструмент не ответил вовремя.",
+  "moduleNotInstalled": "Нужный локальный инструмент не установлен или не найден.",
+  "modulePermissionRequired": "Выберите необходимые разрешения NDS перед использованием этой возможности.",
+  "modulePermissions": "Разрешения NDS",
   "moduleRefresh": "Обновить",
+  "moduleReloadDraft": "Обновить настройки",
   "moduleResponseError": "Локальный инструмент вернул неподдерживаемый ответ.",
+  "moduleSave": "Сохранить настройки модуля",
+  "moduleSaved": "Настройки сохранены на этом устройстве; синхронизация выполняется отдельно.",
+  "moduleSettingsChanged": "Настройки модуля изменились. Обновите форму перед сохранением своего выбора.",
   "moreIncidents": "Следующие инциденты",
   "networkError": "Сервер недоступен. Актуальное состояние сессии не подтверждено.",
   "networkReceive": "Приём данных",
@@ -550,6 +586,12 @@ export const ru = {
   "passkeysEmpty": "Ключи доступа не зарегистрированы.",
   "passkeysHelp": "Удаление ключа завершает созданные с ним сессии. Для удаления нужно войти в систему в течение последних пяти минут.",
   "passkeysTitle": "Ваши ключи доступа",
+  "permissionClipboard": "Использование буфера обмена",
+  "permissionCredentialStore": "Использование защищённых учётных данных",
+  "permissionLocalNetwork": "Соединение с заявленным сервисом",
+  "permissionProcessExecution": "Запуск заявленного локального инструмента",
+  "permissionReadOnly": "Чтение локальных сведений",
+  "permissionUserService": "Доступ к сервису текущего пользователя",
   "preview": "Предпросмотр",
   "privacy": "Данные сессии и ключи vault хранятся в защищённом хранилище ОС. Сервер передаёт ключ vault после подтверждённого входа и регистрации устройства.",
   "providerFailed": "Локальный инструмент не выполнил запрос.",
@@ -857,11 +899,26 @@ export type MessageArgs = {
   "module": undefined;
   "moduleCancel": undefined;
   "moduleCancelled": undefined;
+  "moduleConfigurationConflict": undefined;
+  "moduleDeviceRequired": undefined;
   "moduleDiagnostics": undefined;
+  "moduleDisabled": undefined;
+  "moduleEnabled": undefined;
   "moduleInputError": undefined;
+  "moduleInstallationUnknown": undefined;
+  "moduleInstalled": undefined;
+  "moduleManagementHelp": undefined;
+  "moduleMetadataError": undefined;
   "moduleNetworkError": undefined;
+  "moduleNotInstalled": undefined;
+  "modulePermissionRequired": undefined;
+  "modulePermissions": undefined;
   "moduleRefresh": undefined;
+  "moduleReloadDraft": undefined;
   "moduleResponseError": undefined;
+  "moduleSave": undefined;
+  "moduleSaved": undefined;
+  "moduleSettingsChanged": undefined;
   "moreIncidents": undefined;
   "networkError": undefined;
   "networkReceive": undefined;
@@ -886,6 +943,12 @@ export type MessageArgs = {
   "passkeysEmpty": undefined;
   "passkeysHelp": undefined;
   "passkeysTitle": undefined;
+  "permissionClipboard": undefined;
+  "permissionCredentialStore": undefined;
+  "permissionLocalNetwork": undefined;
+  "permissionProcessExecution": undefined;
+  "permissionReadOnly": undefined;
+  "permissionUserService": undefined;
   "preview": undefined;
   "privacy": undefined;
   "providerFailed": undefined;

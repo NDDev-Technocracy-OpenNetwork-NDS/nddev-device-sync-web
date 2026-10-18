@@ -33,6 +33,7 @@ function Layout() {
         </Link>
         {view.authenticated && (
           <>
+            <Link to="/modules">{t("localModules")}</Link>
             <Link to="/company">{t("companyTitle")}</Link>
             <Link to="/vault">{t("vaultTitle")}</Link>
             <Link to="/repositories">{t("catalogTitle")}</Link>
