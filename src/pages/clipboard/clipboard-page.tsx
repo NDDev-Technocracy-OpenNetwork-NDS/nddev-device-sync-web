@@ -1,3 +1,4 @@
+import { supports_clipboard } from "@nds/runtime";
 import { useForm } from "@tanstack/react-form";
 import { queryOptions, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRef, useState } from "react";
@@ -113,7 +114,10 @@ export function ClipboardPage() {
         {!read.isError && read.data?.conflicted && <p className="notice">{t("vaultConflict")}</p>}
         {reservationError && <p role="alert">{t(reservationError)}</p>}
         {copied && <p role="status">{t("clipboardCopied")}</p>}
-        <Button disabled={busy || read.isError || read.data?.present !== true} onClick={copy}>
+        <Button
+          disabled={busy || read.isError || read.data?.present !== true || !supports_clipboard()}
+          onClick={copy}
+        >
           {t("copySharedClipboard")}
         </Button>
       </CardContent>

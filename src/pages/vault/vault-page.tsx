@@ -1,4 +1,4 @@
-import { new_vault_record_id, type RecordView } from "@nds/runtime";
+import { new_vault_record_id, type RecordView, supports_clipboard } from "@nds/runtime";
 import { useForm } from "@tanstack/react-form";
 import { Link } from "@tanstack/react-router";
 import { useRef, useState } from "react";
@@ -220,7 +220,7 @@ export function VaultPage() {
                         </Button>
                         <Button
                           variant="outline"
-                          disabled={busy}
+                          disabled={busy || !supports_clipboard()}
                           onClick={() => {
                             const ticket = client.reserve_clipboard_copy();
                             act(() => client.vault_copy_secret(record.id, ticket));
