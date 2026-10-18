@@ -35,6 +35,7 @@ function Layout() {
           <>
             <Link to="/company">{t("companyTitle")}</Link>
             <Link to="/vault">{t("vaultTitle")}</Link>
+            <Link to="/repositories">{t("catalogTitle")}</Link>
             <Link to="/passkeys">{t("passkeysTitle")}</Link>
           </>
         )}

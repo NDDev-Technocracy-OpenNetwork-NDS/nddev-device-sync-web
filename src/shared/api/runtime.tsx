@@ -23,6 +23,7 @@ interface Runtime {
   view: View;
   scope: string;
   busy: boolean;
+  workPermitted: boolean;
   error: SimpleMessageKey | null;
   invitation: InvitationState;
   run: (
@@ -53,7 +54,8 @@ export function RuntimeProvider({
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<SimpleMessageKey | null>(null);
   const [invitation, setInvitation] = useState(initialInvitation);
-  const active = useRef(true);
+  const active = useRef(false);
+  const [workPermitted, setWorkPermitted] = useState(false);
   const inAction = useRef(false);
   const reconciliation = useRef<Promise<void> | null>(null);
   const observe = useCallback(() => {
@@ -99,6 +101,10 @@ export function RuntimeProvider({
   useEffect(() => {
     record_client_lifecycle("Ready");
     let ticks = 0;
+    function setLifecycle(state: ClientLifecycle) {
+      active.current = client.lifecycle(state);
+      setWorkPermitted(active.current);
+    }
     function lifecycle() {
       const state: ClientLifecycle =
         document.visibilityState === "hidden"
@@ -106,7 +112,7 @@ export function RuntimeProvider({
           : document.hasFocus()
             ? "Resumed"
             : "Inactive";
-      active.current = client.lifecycle(state);
+      setLifecycle(state);
     }
     function reconcile() {
       if (!active.current || inAction.current || reconciliation.current) return;
@@ -129,7 +135,7 @@ export function RuntimeProvider({
       reconcile();
     };
     const onExit = () => {
-      active.current = client.lifecycle("Detached");
+      setLifecycle("Detached");
     };
     const onInvitation = (event: Event) => {
       const value: unknown = event instanceof CustomEvent ? event.detail : undefined;
@@ -165,7 +171,9 @@ export function RuntimeProvider({
     };
   }, [client, observe, run]);
   return (
-    <RuntimeContext value={{ client, view, scope, busy, error, invitation, run, observe }}>
+    <RuntimeContext
+      value={{ client, view, scope, busy, workPermitted, error, invitation, run, observe }}
+    >
       {children}
     </RuntimeContext>
   );

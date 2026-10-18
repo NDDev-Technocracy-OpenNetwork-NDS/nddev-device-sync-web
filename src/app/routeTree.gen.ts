@@ -15,6 +15,7 @@ import { Route as CompanyRouteImport } from './routes/company'
 import { Route as DiagnosticsRouteImport } from './routes/diagnostics'
 import { Route as IncidentsRouteImport } from './routes/incidents'
 import { Route as PasskeysRouteImport } from './routes/passkeys'
+import { Route as RepositoriesRouteImport } from './routes/repositories'
 import { Route as StatesRouteImport } from './routes/states'
 import { Route as VaultRouteImport } from './routes/vault'
 
@@ -48,6 +49,11 @@ const PasskeysRoute = PasskeysRouteImport.update({
   path: '/passkeys',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RepositoriesRoute = RepositoriesRouteImport.update({
+  id: '/repositories',
+  path: '/repositories',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StatesRoute = StatesRouteImport.update({
   id: '/states',
   path: '/states',
@@ -66,6 +72,7 @@ export interface FileRoutesByFullPath {
   '/diagnostics': typeof DiagnosticsRoute
   '/incidents': typeof IncidentsRoute
   '/passkeys': typeof PasskeysRoute
+  '/repositories': typeof RepositoriesRoute
   '/states': typeof StatesRoute
   '/vault': typeof VaultRoute
 }
@@ -76,6 +83,7 @@ export interface FileRoutesByTo {
   '/diagnostics': typeof DiagnosticsRoute
   '/incidents': typeof IncidentsRoute
   '/passkeys': typeof PasskeysRoute
+  '/repositories': typeof RepositoriesRoute
   '/states': typeof StatesRoute
   '/vault': typeof VaultRoute
 }
@@ -87,6 +95,7 @@ export interface FileRoutesById {
   '/diagnostics': typeof DiagnosticsRoute
   '/incidents': typeof IncidentsRoute
   '/passkeys': typeof PasskeysRoute
+  '/repositories': typeof RepositoriesRoute
   '/states': typeof StatesRoute
   '/vault': typeof VaultRoute
 }
@@ -99,6 +108,7 @@ export interface FileRouteTypes {
     | '/diagnostics'
     | '/incidents'
     | '/passkeys'
+    | '/repositories'
     | '/states'
     | '/vault'
   fileRoutesByTo: FileRoutesByTo
@@ -109,6 +119,7 @@ export interface FileRouteTypes {
     | '/diagnostics'
     | '/incidents'
     | '/passkeys'
+    | '/repositories'
     | '/states'
     | '/vault'
   id:
@@ -119,6 +130,7 @@ export interface FileRouteTypes {
     | '/diagnostics'
     | '/incidents'
     | '/passkeys'
+    | '/repositories'
     | '/states'
     | '/vault'
   fileRoutesById: FileRoutesById
@@ -130,6 +142,7 @@ export interface RootRouteChildren {
   DiagnosticsRoute: typeof DiagnosticsRoute
   IncidentsRoute: typeof IncidentsRoute
   PasskeysRoute: typeof PasskeysRoute
+  RepositoriesRoute: typeof RepositoriesRoute
   StatesRoute: typeof StatesRoute
   VaultRoute: typeof VaultRoute
 }
@@ -178,6 +191,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PasskeysRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/repositories': {
+      id: '/repositories'
+      path: '/repositories'
+      fullPath: '/repositories'
+      preLoaderRoute: typeof RepositoriesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/states': {
       id: '/states'
       path: '/states'
@@ -202,6 +222,7 @@ const rootRouteChildren: RootRouteChildren = {
   DiagnosticsRoute: DiagnosticsRoute,
   IncidentsRoute: IncidentsRoute,
   PasskeysRoute: PasskeysRoute,
+  RepositoriesRoute: RepositoriesRoute,
   StatesRoute: StatesRoute,
   VaultRoute: VaultRoute,
 }

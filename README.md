@@ -6,7 +6,9 @@ Rust owns identity, company permissions, encryption, replica and immutable comma
 WASM metadata bindings come from Rust and en/ru messages come from Shared ARB.
 OpenNetwork tokens, bundled fonts and the mark retain their canonical design input.
 
-Account/device, company/invitation and Vault workflows are implemented. The
+Account/device, passkey, company/invitation, Vault, shared clipboard, diagnostics,
+incident and repository catalog workflows are implemented. Git materialization
+and restart-safe automatic catalog traversal are still pending. The
 Flutter browser in `lib`/`web` remains the migration baseline until remaining
 screens, typed browser adapters and the pending-work upgrade pass ADR 0010.
 This candidate is not yet a completed browser replacement or a release.
