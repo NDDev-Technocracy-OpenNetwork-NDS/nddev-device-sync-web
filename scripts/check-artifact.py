@@ -42,13 +42,11 @@ assert re.fullmatch('[a-f0-9]{40}', provenance['assembly_source_commit'])
 repository = Path(__file__).resolve().parent.parent
 def source_file(name):
     return subprocess.check_output(['git', 'show', provenance['assembly_source_commit'] + ':' + name], cwd=repository, timeout=15)
-if provenance.get('presentation') == 'react':
-    source = source_file('assembly.lock.json')
-    assert json.loads(source)['shared']['commit'] == provenance['shared_source_commit']
-    assert hashlib.sha256(source).hexdigest() == provenance['assembly_lock_sha256']
-    assert hashlib.sha256(source_file('bun.lock')).hexdigest() == provenance['bun_lock_sha256']
-else:
-    assert 'ref: ' + provenance['shared_source_commit'] in source_file('pubspec.yaml').decode()
+assert provenance['presentation'] == 'react'
+source = source_file('assembly.lock.json')
+assert json.loads(source)['shared']['commit'] == provenance['shared_source_commit']
+assert hashlib.sha256(source).hexdigest() == provenance['assembly_lock_sha256']
+assert hashlib.sha256(source_file('bun.lock')).hexdigest() == provenance['bun_lock_sha256']
 assert b'NDS-SOURCE-1\0' + provenance['shared_source_commit'].encode() in (root / 'pkg/nds_native_bg.wasm').read_bytes()
 worker = (root / 'nds-offline.js').read_text()
 assert 'skipWaiting(' not in worker
