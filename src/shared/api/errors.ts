@@ -2,6 +2,12 @@ import type { SimpleMessageKey } from "../i18n";
 
 // Presentation mapping only. Authorization and retry policy remain in Rust.
 const messages: Readonly<Record<string, SimpleMessageKey>> = {
+  module_configuration_changed: "moduleSettingsChanged",
+  module_disabled: "moduleDisabled",
+  module_permission_required: "modulePermissionRequired",
+  module_configuration_conflict: "moduleConfigurationConflict",
+  module_not_installed: "moduleNotInstalled",
+  module_unsupported: "providerUnavailable",
   invalid_endpoint: "endpointError",
   invalid_input: "inputError",
   transport_unavailable: "networkError",
