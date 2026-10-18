@@ -52,9 +52,11 @@ requests, corruption, concurrent installation, repair bounds and preserved data.
 
 ## Offline boundary
 
-The last verified session and device grant authorize local encrypted records
-until the original session expires (at most eight hours). Changes remain in the
-durable encrypted outbox until the server acknowledges them. Server sequence
+A signed server verification of the active device authorizes local encrypted
+records for at most seven days. Existing shorter grants retain their original
+expiry until reverified; account metadata alone cannot extend them. Reconnection
+verifies the device before uploading retained work. Changes remain in the durable
+encrypted outbox until the server acknowledges them. Server sequence
 and explicit conflict resolution determine convergence. Browser site-data
 removal or storage eviction can remove unsynchronized data; persistent-storage
 status and qualification are part of browser acceptance.
