@@ -28,6 +28,7 @@ const messages: Readonly<Record<string, SimpleMessageKey>> = {
   browser_unavailable: "launchError",
   method_unavailable: "unavailable",
   diagnostics_unavailable: "diagnosticsUnavailable",
+  telemetry_unavailable: "telemetryUnavailable",
   vault_invalid_input: "vaultInputError",
   vault_locked: "vaultLocked",
   vault_authentication_failed: "vaultProofError",

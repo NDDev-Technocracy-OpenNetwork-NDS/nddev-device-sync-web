@@ -1,5 +1,6 @@
 import { client_diagnostics, configure_debug, type ExportPolicy } from "@nds/runtime";
 import { useQuery } from "@tanstack/react-query";
+import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { errorMessage } from "@/shared/api/errors";
 import { useRuntime } from "@/shared/api/runtime";
@@ -90,6 +91,9 @@ export function DiagnosticsPage() {
           </CardHeader>
           <CardContent className="stack">
             <p>{t(policy[delivery.policy])}</p>
+            <nav className="actions" aria-label={t("moduleDiagnostics")}>
+              <Link to="/incidents">{t("alertsTitle")}</Link>
+            </nav>
             <p>{delivery.initialized ? t("telemetryInitialized") : t("telemetryUnavailable")}</p>
             {delivery.local_persistence_ready !== null && (
               <p>
