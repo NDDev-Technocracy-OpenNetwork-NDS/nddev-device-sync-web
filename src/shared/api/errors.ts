@@ -14,6 +14,7 @@ const messages: Readonly<Record<string, SimpleMessageKey>> = {
   invalid_response: "responseError",
   cancelled: "cancelledError",
   busy: "rateError",
+  online_verification_required: "rateError",
   server_busy: "rateError",
   authentication_failed: "authError",
   challenge_expired: "expiredError",
