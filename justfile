@@ -1,13 +1,16 @@
 set shell := ["bash", "-euo", "pipefail", "-c"]
 
 check:
-    flutter pub get --enforce-lockfile
-    dart format --output=none --set-exit-if-changed lib
-    flutter analyze --no-pub
+    bun install --frozen-lockfile --ignore-scripts
+    bun run lint
+    bun run check:worker
+    bun run build --development-http
+    bun run scripts/generate-presentation.ts --check
 
 build:
-    python3 scripts/build.py
+    bun run build
+    python3 scripts/check-artifact.py build/react
 
 worker-check:
-    npm ci --ignore-scripts
-    npm test
+    bun run check:worker
+    bun run test:worker
