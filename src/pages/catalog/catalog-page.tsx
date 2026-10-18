@@ -20,6 +20,12 @@ function message(error: unknown, saved: boolean): SimpleMessageKey {
     return "catalogUnavailable";
   }
   switch (error.message) {
+    case "ModuleDisabled":
+      return "moduleDisabled";
+    case "ModulePermissionRequired":
+      return "modulePermissionRequired";
+    case "ModuleConfigurationConflict":
+      return "moduleConfigurationConflict";
     case "AuthorizationRequired":
       return "catalogSignIn";
     case "CredentialChanged":
