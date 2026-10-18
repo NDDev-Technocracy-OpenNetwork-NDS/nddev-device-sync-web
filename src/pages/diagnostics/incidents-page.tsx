@@ -1,6 +1,7 @@
 import type { IncidentPage, IncidentView } from "@nds/runtime";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
+import { errorMessage } from "@/shared/api/errors";
 import { useRuntime } from "@/shared/api/runtime";
 import { useText } from "@/shared/i18n";
 import { Button } from "@/shared/ui/button";
@@ -15,18 +16,25 @@ export function IncidentsPage() {
   const read = useQuery({ queryKey: key, queryFn: () => client.incidents(after) });
   const disabled = busy || read.isFetching || read.isError;
   function act(incident: IncidentView, seconds: number) {
-    void run(async () => {
-      const updated = await client.incident_action(incident.id, incident.revision, seconds);
-      // Use the committed receipt without making success depend on another read.
-      cache.setQueryData<IncidentPage>(
-        key,
-        (page) =>
-          page && {
-            ...page,
-            incidents: page.incidents.map((item) => (item.id === updated.id ? updated : item)),
-          },
-      );
-    });
+    void run(
+      async () => {
+        const updated = await client.incident_action(incident.id, incident.revision, seconds);
+        // Use the committed receipt without making success depend on another read.
+        cache.setQueryData<IncidentPage>(
+          key,
+          (page) =>
+            page && {
+              ...page,
+              incidents: page.incidents.map((item) => (item.id === updated.id ? updated : item)),
+            },
+        );
+      },
+      false,
+      (error) =>
+        error instanceof Error && error.message === "operation_conflict"
+          ? "operationBusy"
+          : errorMessage(error),
+    );
   }
   return (
     <Card>
