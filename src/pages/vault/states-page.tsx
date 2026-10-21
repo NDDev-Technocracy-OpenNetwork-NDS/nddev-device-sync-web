@@ -73,11 +73,11 @@ export function StatesPage() {
                 <dl>
                   <dt>{t("stateDevice")}</dt>
                   <dd>{item.device_id}</dd>
-                  <dt>{t("verified")}</dt>
+                  <dt>{t("stateObserved")}</dt>
                   <dd>{date(item.observed_at_ms)}</dd>
                   {item.checked_at_ms !== 0n && (
                     <>
-                      <dt>{t("lastRun")}</dt>
+                      <dt>{t("stateChecked")}</dt>
                       <dd>{date(item.checked_at_ms)}</dd>
                     </>
                   )}
