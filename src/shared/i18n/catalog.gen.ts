@@ -238,7 +238,7 @@ export const en = {
   "privacy": "Session credentials and vault keys stay in native secure storage. The server delivers your vault key after verified sign-in and device enrollment.",
   "providerFailed": "The local tool could not complete this request.",
   "providerUnavailable": "The local tool is unavailable.",
-  "publishDeviceState": "Publish this device and NDS session",
+  "publishDeviceState": "Publish device, session and module state",
   "publishModuleState": "Publish observed module state",
   "rateError": "Please wait before trying again.",
   "reachable": "Available",
@@ -285,9 +285,11 @@ export const en = {
   "spansLabel": "Operation traces",
   "staged": "Staged changes",
   "startupFailed": "NDS could not start. Restart the application. If this continues, check the installation and local diagnostics.",
+  "stateChecked": "Last checked",
   "stateDevice": "Device",
   "stateDevices": "Devices",
   "stateHelp": "These are encrypted observations from signed devices. Their timestamps describe when they were observed, not current reachability. Sync does not execute tools on another device.",
+  "stateObserved": "Observed at",
   "statePublishError": "State could not be synchronized. Check the session, device and vault connection.",
   "storageFull": "Local storage is full. The change was not saved.",
   "storeError": "Protected credential storage is unavailable. No plaintext fallback is used.",
@@ -596,7 +598,7 @@ export const ru = {
   "privacy": "Данные сессии и ключи vault хранятся в защищённом хранилище ОС. Сервер передаёт ключ vault после подтверждённого входа и регистрации устройства.",
   "providerFailed": "Локальный инструмент не выполнил запрос.",
   "providerUnavailable": "Локальный инструмент недоступен.",
-  "publishDeviceState": "Отправить состояние устройства и NDS-сессии",
+  "publishDeviceState": "Отправить состояние устройства, сессии и модулей",
   "publishModuleState": "Отправить наблюдаемое состояние модулей",
   "rateError": "Подождите перед следующей попыткой.",
   "reachable": "Доступен",
@@ -643,9 +645,11 @@ export const ru = {
   "spansLabel": "Трассировки операций",
   "staged": "Подготовлено изменений",
   "startupFailed": "Не удалось запустить NDS. Перезапустите приложение. Если ошибка повторится, проверьте установку и локальную диагностику.",
+  "stateChecked": "Последняя проверка",
   "stateDevice": "Устройство",
   "stateDevices": "Устройства",
   "stateHelp": "Это зашифрованные наблюдения подписанных устройств. Время показывает момент наблюдения, а не текущую доступность. Синхронизация не запускает инструменты на другом устройстве.",
+  "stateObserved": "Время наблюдения",
   "statePublishError": "Состояние не удалось синхронизировать. Проверьте сессию, устройство и подключение к vault.",
   "storageFull": "Локальное хранилище заполнено. Изменение не сохранено.",
   "storeError": "Защищённое хранилище учётных данных недоступно. Сохранение открытым текстом не используется.",
@@ -1000,9 +1004,11 @@ export type MessageArgs = {
   "spansLabel": undefined;
   "staged": undefined;
   "startupFailed": undefined;
+  "stateChecked": undefined;
   "stateDevice": undefined;
   "stateDevices": undefined;
   "stateHelp": undefined;
+  "stateObserved": undefined;
   "statePublishError": undefined;
   "storageFull": undefined;
   "storeError": undefined;
