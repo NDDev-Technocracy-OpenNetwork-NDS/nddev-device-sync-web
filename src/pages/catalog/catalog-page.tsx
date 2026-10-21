@@ -3,6 +3,7 @@ import type {
   GithubCredentialReferencePage,
   GithubRepositoryPageView,
   GithubSavedRepositoryPageView,
+  GithubSourceView,
 } from "@nds/runtime";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { errorMessage } from "@/shared/api/errors";
@@ -54,6 +55,9 @@ function message(error: unknown, saved: boolean): SimpleMessageKey {
   }
 }
 type Action = (current: () => boolean) => Promise<void>;
+function credentialKey(record: GithubCredentialReference): string {
+  return JSON.stringify([record.record_ref, record.revision, record.pending_id]);
+}
 
 export function CatalogPage() {
   const { client, workPermitted } = useRuntime();
@@ -62,6 +66,7 @@ export function CatalogPage() {
   const mode = useRef(true);
   const [credentials, setCredentials] = useState<GithubCredentialReferencePage | null>(null);
   const [selected, setSelected] = useState<GithubCredentialReference | null>(null);
+  const [source, setSource] = useState<GithubSourceView | null>(null);
   const [page, setPage] = useState<GithubRepositoryPageView | null>(null);
   const [stored, setStored] = useState<GithubSavedRepositoryPageView | null>(null);
   const [busy, setBusy] = useState(false);
@@ -92,6 +97,21 @@ export function CatalogPage() {
         const description = message(error, mode.current);
         if (!current()) return;
         const code = error instanceof Error ? error.message : "";
+        if (code === "Busy") {
+          try {
+            const source = await client.github_catalog_source();
+            if (current()) {
+              setSource(source);
+              setSelected(source.credential);
+            }
+          } catch {
+            if (current()) {
+              setSource(null);
+              setSelected(null);
+            }
+          }
+          if (!current()) return;
+        }
         // Preserve the accepted page for an explicit retry of Rust's original remainder.
         if (!["Busy", "Timeout", "CapacityExhausted"].includes(code)) {
           setPage(null);
@@ -109,13 +129,24 @@ export function CatalogPage() {
         }
       }
     },
-    [workPermitted],
+    [workPermitted, client],
   );
   const loadCredentials = useCallback(
     (after = "") =>
       run(async (current) => {
+        const source = await client.github_catalog_source();
         const value = await client.github_catalog_credentials(after);
-        if (current()) setCredentials(value);
+        if (current()) {
+          setCredentials(value);
+          setSource(source);
+          const selected = source.credential;
+          setSelected(
+            selected === null
+              ? null
+              : (value.items.find((record) => credentialKey(record) === credentialKey(selected)) ??
+                  selected),
+          );
+        }
       }),
     [client, run],
   );
@@ -138,6 +169,7 @@ export function CatalogPage() {
     mounted.current = true;
     setCredentials(null);
     setSelected(null);
+    setSource(null);
     setPage(null);
     setStored(null);
     setError(null);
@@ -149,20 +181,30 @@ export function CatalogPage() {
     };
   }, [workPermitted, stop, loadSaved, loadCredentials]);
 
-  function select(record: GithubCredentialReference) {
-    epoch.current++;
-    running.current = false;
-    setBusy(false);
-    setPage(null);
-    setSelected(null);
-    setError(null);
-    try {
-      client.select_github_credential(record.record_ref, record.revision, record.pending_id);
+  const select = (record: GithubCredentialReference | null) =>
+    run(async (current) => {
+      if (!source || source.conflicted) return;
+      if (record === null) {
+        await client.clear_github_catalog_source(source.revision, source.pending_id);
+      } else {
+        await client.select_github_credential(
+          record.record_ref,
+          record.revision,
+          record.pending_id,
+          source.revision,
+          source.pending_id,
+        );
+      }
+      if (!current()) return;
+      setPage(null);
       setSelected(record);
-    } catch (error) {
-      setError(message(error, false));
-    }
-  }
+      setSource(null);
+      const saved = await client.github_catalog_source();
+      if (current()) {
+        setSource(saved);
+        setSelected(saved.credential);
+      }
+    });
   function changeMode(value: boolean) {
     setSaved(value);
     mode.current = value;
@@ -178,7 +220,9 @@ export function CatalogPage() {
     setError("catalogCancelled");
   }
   const choices = credentials?.items ?? [];
-  const selectionOnPage = choices.some((choice) => choice.record_ref === selected?.record_ref);
+  const selectionOnPage =
+    selected !== null &&
+    choices.some((choice) => credentialKey(choice) === credentialKey(selected));
   const disabled = busy || !workPermitted;
   return (
     <div className="stack">
@@ -232,33 +276,48 @@ export function CatalogPage() {
             ) : (
               <>
                 <p>{t("catalogHelp")}</p>
+                <p>{t("catalogSourceHelp")}</p>
+                {source?.pending_id !== null && source !== null && (
+                  <p role="status">{t("vaultRecordPending")}</p>
+                )}
+                {source?.conflicted && <p role="alert">{t("vaultConflict")}</p>}
                 <Label htmlFor="catalog-credential">{t("catalogCredential")}</Label>
                 <select
                   id="catalog-credential"
-                  value={selected?.record_ref ?? ""}
+                  disabled={disabled || source === null || source.conflicted}
+                  value={selected === null ? "" : credentialKey(selected)}
                   onChange={(event) => {
                     const record = choices.find(
-                      (record) => record.record_ref === event.target.value,
+                      (record) => credentialKey(record) === event.target.value,
                     );
-                    if (record) select(record);
+                    if (record) void select(record);
                   }}
                 >
                   <option value="" disabled>
                     {t("catalogChooseCredential")}
                   </option>
                   {selected && !selectionOnPage && (
-                    <option value={selected.record_ref}>
+                    <option value={credentialKey(selected)}>
                       {selected.title || selected.record_ref}
                     </option>
                   )}
                   {choices.map((record) => (
-                    <option key={record.record_ref} value={record.record_ref}>
+                    <option key={credentialKey(record)} value={credentialKey(record)}>
                       {record.title || record.record_ref}
                     </option>
                   ))}
                 </select>
                 {selected?.username && <p>{selected.username}</p>}
                 <div className="actions">
+                  {source?.credential !== null && source !== null && (
+                    <Button
+                      variant="outline"
+                      disabled={disabled || source.conflicted}
+                      onClick={() => void select(null)}
+                    >
+                      {t("catalogClearSource")}
+                    </Button>
+                  )}
                   <Button
                     variant="outline"
                     disabled={disabled}
