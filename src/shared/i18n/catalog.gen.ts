@@ -206,6 +206,7 @@ export const en = {
   "moduleSave": "Save module settings",
   "moduleSaved": "Settings saved on this device; synchronization continues separately.",
   "moduleSettingsChanged": "Module settings changed. Refresh the form before saving your choice.",
+  "moduleStateQueued": "Local states queued for synchronization.",
   "moreIncidents": "Next incidents",
   "networkError": "The server could not be reached. No fresh session state is confirmed.",
   "networkReceive": "Network receive rate",
@@ -568,6 +569,7 @@ export const ru = {
   "moduleSave": "Сохранить настройки модуля",
   "moduleSaved": "Настройки сохранены на этом устройстве; синхронизация выполняется отдельно.",
   "moduleSettingsChanged": "Настройки модуля изменились. Обновите форму перед сохранением своего выбора.",
+  "moduleStateQueued": "Локальные состояния поставлены в очередь синхронизации.",
   "moreIncidents": "Следующие инциденты",
   "networkError": "Сервер недоступен. Актуальное состояние сессии не подтверждено.",
   "networkReceive": "Приём данных",
@@ -929,6 +931,7 @@ export type MessageArgs = {
   "moduleSave": undefined;
   "moduleSaved": undefined;
   "moduleSettingsChanged": undefined;
+  "moduleStateQueued": undefined;
   "moreIncidents": undefined;
   "networkError": undefined;
   "networkReceive": undefined;
