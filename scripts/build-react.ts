@@ -16,13 +16,25 @@ run("bun", ["run", "check:worker"]);
 run("bun", ["run", "scripts/generate-presentation.ts"]);
 const rust = resolve(shared, "packages/nds_native/rust");
 const prepare = resolve(shared, "packages/nds_native/tool/prepare_native.py");
-const target = process.env.CARGO_TARGET_DIR ?? resolve(root, ".nds-cache/rust");
-const environment = { CARGO_TARGET_DIR: target, NDS_SOURCE_COMMIT: assembly.shared.commit };
+const environment: Record<string, string> = { NDS_SOURCE_COMMIT: assembly.shared.commit };
 const cargo = (args: string[]) =>
-  run("python3", [prepare, "--", "cargo", ...args], rust, environment);
+  run(
+    "python3",
+    [prepare, "--", "cargo", ...args, "--manifest-path", join(rust, "Cargo.toml")],
+    root,
+    environment,
+  );
 const metadata: unknown = JSON.parse(cargo(["metadata", "--locked", "--format-version", "1"]));
-if (!object(metadata) || !Array.isArray(metadata.packages))
+if (
+  !object(metadata) ||
+  !Array.isArray(metadata.packages) ||
+  typeof metadata.target_directory !== "string" ||
+  typeof metadata.build_directory !== "string"
+)
   throw new Error("Invalid Cargo metadata");
+const target = metadata.target_directory;
+environment.CARGO_TARGET_DIR = target;
+environment.CARGO_BUILD_BUILD_DIR = metadata.build_directory;
 const packages: unknown[] = metadata.packages;
 function packageMetadata(name: string) {
   const selected = packages.filter((item) => object(item) && item.name === name);
@@ -93,7 +105,7 @@ const provenance = {
   design_source_commit: designCommit,
   development_http: development,
   rust_target: "wasm32-unknown-unknown",
-  rust: run("rustc", ["--version"], rust),
+  rust: run("python3", [prepare, "--", "rustc", "--version"], root, environment),
   wasm_bindgen: bindgen,
   bun: Bun.version,
   bun_lock_sha256: digest(readFileSync(join(root, "bun.lock"))),
