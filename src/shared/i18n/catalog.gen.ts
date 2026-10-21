@@ -20,6 +20,7 @@ export const en = {
   "catalogCancelled": "Repository request cancelled.",
   "catalogCapacityReached": "The catalog could not finish updating because synchronization storage reached its limit. Saved observations remain available.",
   "catalogChooseCredential": "Choose a current vault record.",
+  "catalogClearSource": "Clear GitHub choice",
   "catalogCredential": "Vault credential",
   "catalogCredentialChanged": "This vault record changed. Refresh records and select it again.",
   "catalogEmptyPage": "No repositories on this page.",
@@ -51,6 +52,7 @@ export const en = {
   "catalogSavedHelp": "Encrypted observations retained in NDS. Dates show when data was observed, not current GitHub access or freshness.",
   "catalogSavedNext": "Next saved page",
   "catalogSignIn": "Sign in and verify this device to read repositories.",
+  "catalogSourceHelp": "This choice is saved and synchronized across your account. Enable GDS permissions separately on each device.",
   "catalogTimeout": "Repository request timed out. Try again.",
   "catalogTitle": "GitHub repositories",
   "catalogUnavailable": "Repository catalog is unavailable.",
@@ -204,6 +206,7 @@ export const en = {
   "moduleSave": "Save module settings",
   "moduleSaved": "Settings saved on this device; synchronization continues separately.",
   "moduleSettingsChanged": "Module settings changed. Refresh the form before saving your choice.",
+  "moduleStateQueued": "Local states queued for synchronization.",
   "moreIncidents": "Next incidents",
   "networkError": "The server could not be reached. No fresh session state is confirmed.",
   "networkReceive": "Network receive rate",
@@ -380,6 +383,7 @@ export const ru = {
   "catalogCancelled": "Запрос репозиториев отменён.",
   "catalogCapacityReached": "Каталог обновлён не полностью: достигнут лимит хранилища синхронизации. Сохранённые сведения остаются доступны.",
   "catalogChooseCredential": "Выберите актуальную запись сейфа.",
+  "catalogClearSource": "Сбросить выбор GitHub",
   "catalogCredential": "Учётные данные из сейфа",
   "catalogCredentialChanged": "Запись сейфа изменилась. Обновите записи и выберите её повторно.",
   "catalogEmptyPage": "На этой странице нет репозиториев.",
@@ -411,6 +415,7 @@ export const ru = {
   "catalogSavedHelp": "Зашифрованные сведения, сохранённые в NDS. Даты показывают время наблюдения, а не текущую актуальность или доступ к GitHub.",
   "catalogSavedNext": "Следующая сохранённая страница",
   "catalogSignIn": "Войдите в аккаунт и подтвердите это устройство для просмотра репозиториев.",
+  "catalogSourceHelp": "Выбор сохраняется и синхронизируется в аккаунте. Разрешения GDS включаются отдельно на каждом устройстве.",
   "catalogTimeout": "Время ожидания запроса истекло. Повторите запрос.",
   "catalogTitle": "Репозитории GitHub",
   "catalogUnavailable": "Каталог репозиториев недоступен.",
@@ -564,6 +569,7 @@ export const ru = {
   "moduleSave": "Сохранить настройки модуля",
   "moduleSaved": "Настройки сохранены на этом устройстве; синхронизация выполняется отдельно.",
   "moduleSettingsChanged": "Настройки модуля изменились. Обновите форму перед сохранением своего выбора.",
+  "moduleStateQueued": "Локальные состояния поставлены в очередь синхронизации.",
   "moreIncidents": "Следующие инциденты",
   "networkError": "Сервер недоступен. Актуальное состояние сессии не подтверждено.",
   "networkReceive": "Приём данных",
@@ -739,6 +745,7 @@ export type MessageArgs = {
   "catalogCancelled": undefined;
   "catalogCapacityReached": undefined;
   "catalogChooseCredential": undefined;
+  "catalogClearSource": undefined;
   "catalogCredential": undefined;
   "catalogCredentialChanged": undefined;
   "catalogEmptyPage": undefined;
@@ -770,6 +777,7 @@ export type MessageArgs = {
   "catalogSavedHelp": undefined;
   "catalogSavedNext": undefined;
   "catalogSignIn": undefined;
+  "catalogSourceHelp": undefined;
   "catalogTimeout": undefined;
   "catalogTitle": undefined;
   "catalogUnavailable": undefined;
@@ -923,6 +931,7 @@ export type MessageArgs = {
   "moduleSave": undefined;
   "moduleSaved": undefined;
   "moduleSettingsChanged": undefined;
+  "moduleStateQueued": undefined;
   "moreIncidents": undefined;
   "networkError": undefined;
   "networkReceive": undefined;

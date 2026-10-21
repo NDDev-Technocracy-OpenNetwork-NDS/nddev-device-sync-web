@@ -12,6 +12,10 @@ and restart-safe automatic catalog traversal are still pending. React replaces
 the previous Flutter browser assembly under ADR 0010; desktop and mobile retain
 Flutter. This source is part of the first alpha, not a completed release.
 
+The catalog saves the explicit GitHub choice through the shared encrypted Rust
+Vault. Reopening restores the choice; clearing it does not need GitHub access.
+Device permissions remain separate, and conflicted source settings stay blocked.
+
 ## Build
 
 Use Bun/Node from `package.json` and `rust-toolchain.toml` with the
