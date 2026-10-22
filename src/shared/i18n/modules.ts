@@ -14,6 +14,8 @@ export function permissionLabel(value: string): SimpleMessageKey {
       return "permissionUserService";
     case "clipboard":
       return "permissionClipboard";
+    case "git_write":
+      return "permissionGitWrite";
     default:
       return "modulePermissions";
   }
