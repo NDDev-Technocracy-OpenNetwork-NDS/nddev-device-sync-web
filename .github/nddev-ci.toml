@@ -1,0 +1,30 @@
+schema = 1
+profiles = ["typescript-javascript"]
+
+[commands.typescript-javascript]
+toolchain = ["bun", "--version"]
+format = ["bun", "x", "biome", "format", "src", "scripts", "vite.config.ts"]
+lint = ["bun", "run", "lint"]
+type = ["bun", "run", "typecheck:ci"]
+test = ["bun", "run", "test:ci"]
+build = ["bun", "run", "build"]
+
+[not_applicable.typescript-javascript]
+package = "Immutable app-shell artifact; it ships through owned releases and never publishes to a registry"
+
+[reports.typescript-javascript]
+kind = "junit"
+path = ".nddev-reports/web.xml"
+
+[timeouts]
+typescript-javascript = 2400
+
+[extras.generated-worker]
+purpose = "The committed service worker stays identical to its TypeScript source"
+command = ["bun", "run", "check:worker"]
+timeout = 300
+
+[extras.generated-presentation]
+purpose = "The committed presentation bindings stay identical to their canonical sources"
+command = ["bun", "run", "scripts/generate-presentation.ts", "--check"]
+timeout = 300

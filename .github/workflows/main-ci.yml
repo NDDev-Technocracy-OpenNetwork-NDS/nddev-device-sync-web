@@ -1,0 +1,69 @@
+name: main-ci
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: main-validation
+  cancel-in-progress: false
+
+env:
+  GH_TOKEN: ${{ github.token }}
+
+jobs:
+  contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.15.0'
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version-file: package.json
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6
+        with:
+          bun-version-file: package.json
+      - name: Install pinned Rust toolchain
+        run: rustup toolchain install 1.99.1 --profile minimal --target wasm32-unknown-unknown
+      - name: Install pinned wasm tooling
+        run: cargo +1.99.1 install wasm-bindgen-cli --version 0.2.129 --locked
+      - name: Run the STD-0004 native contract
+        id: native
+        uses: NDDev-Technocracy-Standarts/std-0004-ci-cd-workflows/.github/actions/ci@a77e385fcf3c1b000c38167ecac7b74bb7715b10 # std-0004-v0.3.1
+      - name: Require complete native results
+        if: ${{ !cancelled() }}
+        env:
+          STATUS: ${{ steps.native.outputs.status }}
+        run: test "$STATUS" = success
+
+  artifact:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    needs: [contract]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.15.0'
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version-file: package.json
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6
+        with:
+          bun-version-file: package.json
+      - run: rustup toolchain install 1.99.1 --profile minimal --target wasm32-unknown-unknown
+      - run: cargo +1.99.1 install wasm-bindgen-cli --version 0.2.129 --locked
+      - run: bun install --frozen-lockfile --ignore-scripts
+      - run: bun run build
+      - run: python3 scripts/check-artifact.py build/react

@@ -1,21 +1,24 @@
 name: NDS checks
+
 on:
   pull_request:
-    branches: [dev, main]
-  push:
-    branches: [dev, main]
+    branches: [main, dev]
   workflow_dispatch:
+
 permissions:
   contents: read
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+
 env:
   GH_TOKEN: ${{ github.token }}
+
 jobs:
-  react:
+  quality:
     runs-on: ubuntu-24.04
-    timeout-minutes: 35
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
@@ -29,20 +32,15 @@ jobs:
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6
         with:
           bun-version-file: package.json
-      - run: bun install --frozen-lockfile --ignore-scripts
-      - run: bun run lint
-      - run: bun run check:worker
-      - run: bunx playwright install --with-deps chromium
-      - run: bun run test:worker
-      - run: rustup toolchain install 1.99.1 --profile minimal --target wasm32-unknown-unknown
-      - run: cargo +1.99.1 install wasm-bindgen-cli --version 0.2.129 --locked
-      - run: bun run build
+      - name: Install pinned Rust toolchain
+        run: rustup toolchain install 1.99.1 --profile minimal --target wasm32-unknown-unknown
+      - name: Install pinned wasm tooling
+        run: cargo +1.99.1 install wasm-bindgen-cli --version 0.2.129 --locked
+      - name: Run the STD-0004 native contract
+        id: native
+        uses: NDDev-Technocracy-Standarts/std-0004-ci-cd-workflows/.github/actions/ci@a77e385fcf3c1b000c38167ecac7b74bb7715b10 # std-0004-v0.3.1
+      - name: Require complete native results
+        if: ${{ !cancelled() }}
         env:
-          NDS_NATIVE_BUILD_HOME: ${{ runner.temp }}/nds-native
-      - run: python scripts/check-artifact.py build/react
-  quality:
-    if: always()
-    needs: [react]
-    runs-on: ubuntu-24.04
-    steps:
-      - run: test '${{ needs.react.result }}' = success
+          STATUS: ${{ steps.native.outputs.status }}
+        run: test "$STATUS" = success
