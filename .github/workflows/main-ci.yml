@@ -14,7 +14,6 @@ concurrency:
 
 env:
   GH_TOKEN: ${{ github.token }}
-  NDS_NATIVE_BUILD_HOME: ${{ runner.temp }}/nds-native
 
 jobs:
   contract:
