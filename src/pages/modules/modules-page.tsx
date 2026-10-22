@@ -80,32 +80,34 @@ function Settings({ module, saved }: { module: DeviceModuleView; saved: () => Pr
         />
         {t("moduleEnabled")}
       </Label>
-      {module.required_permissions.length > 0 && (
+      {module.required_permissions.length + module.optional_permissions.length > 0 && (
         <fieldset className="stack" disabled={busy || module.conflicted}>
           <legend>{t("modulePermissions")}</legend>
-          {module.required_permissions.map((permission) => (
-            <Label
-              key={permission}
-              htmlFor={`module-${module.id}-${permission}`}
-              className="actions"
-            >
-              <Checkbox
-                id={`module-${module.id}-${permission}`}
-                aria-label={t(permissionLabel(permission))}
-                checked={permissions.has(permission)}
-                onCheckedChange={(checked) => {
-                  setPermissions((previous) => {
-                    const next = new Set(previous);
-                    if (checked) next.add(permission);
-                    else next.delete(permission);
-                    return next;
-                  });
-                  setSubmitted(false);
-                }}
-              />
-              {t(permissionLabel(permission))}
-            </Label>
-          ))}
+          {[...new Set([...module.required_permissions, ...module.optional_permissions])].map(
+            (permission) => (
+              <Label
+                key={permission}
+                htmlFor={`module-${module.id}-${permission}`}
+                className="actions"
+              >
+                <Checkbox
+                  id={`module-${module.id}-${permission}`}
+                  aria-label={t(permissionLabel(permission))}
+                  checked={permissions.has(permission)}
+                  onCheckedChange={(checked) => {
+                    setPermissions((previous) => {
+                      const next = new Set(previous);
+                      if (checked) next.add(permission);
+                      else next.delete(permission);
+                      return next;
+                    });
+                    setSubmitted(false);
+                  }}
+                />
+                {t(permissionLabel(permission))}
+              </Label>
+            ),
+          )}
         </fieldset>
       )}
       {stale && (

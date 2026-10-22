@@ -233,6 +233,7 @@ export const en = {
   "passkeysTitle": "Your passkeys",
   "permissionClipboard": "Use clipboard features",
   "permissionCredentialStore": "Use protected credential references",
+  "permissionGitWrite": "Create checkouts and synchronize existing Git commits",
   "permissionLocalNetwork": "Communicate with the declared service",
   "permissionProcessExecution": "Run the declared local tool",
   "permissionReadOnly": "Read local information",
@@ -250,7 +251,16 @@ export const en = {
   "refreshDevices": "Refresh devices",
   "registerPasskey": "Create passkey",
   "remoteFreshness": "Remote data freshness",
+  "repositoryConnect": "Connect checkout",
+  "repositoryConnected": "Checkout connected: {path}",
+  "repositoryDifferentInstallation": "This checkout belongs to another NDS account or installation.",
+  "repositoryIntentQueued": "Connection intent was queued for NDS synchronization.",
   "repositoryPath": "Absolute repository path",
+  "repositoryPathOccupied": "This location is already occupied. Existing files were preserved.",
+  "repositoryRegistrationPending": "Checkout exists at {path}. Retry connection to finish NDS registration.",
+  "repositoryRelocationRequired": "The saved connection uses another location. Review its move before connecting here.",
+  "repositoryUnsupported": "Local checkout connection is not supported on this device.",
+  "repositoryWrongRemote": "The Git origin or stored repository identity does not match the selected repository.",
   "resend": "Send another code",
   "responseError": "The server response does not match the NDS contract.",
   "result": "Result",
@@ -596,6 +606,7 @@ export const ru = {
   "passkeysTitle": "Ваши ключи доступа",
   "permissionClipboard": "Использование буфера обмена",
   "permissionCredentialStore": "Использование защищённых учётных данных",
+  "permissionGitWrite": "Подключать репозитории и синхронизировать Git-коммиты",
   "permissionLocalNetwork": "Соединение с заявленным сервисом",
   "permissionProcessExecution": "Запуск заявленного локального инструмента",
   "permissionReadOnly": "Чтение локальных сведений",
@@ -613,7 +624,16 @@ export const ru = {
   "refreshDevices": "Обновить устройства",
   "registerPasskey": "Создать ключ доступа",
   "remoteFreshness": "Актуальность удалённых данных",
+  "repositoryConnect": "Подключить репозиторий",
+  "repositoryConnected": "Репозиторий подключён: {path}",
+  "repositoryDifferentInstallation": "Репозиторий привязан к другому аккаунту или установке NDS.",
+  "repositoryIntentQueued": "Намерение подключения поставлено в очередь синхронизации NDS.",
   "repositoryPath": "Абсолютный путь репозитория",
+  "repositoryPathOccupied": "Это место уже занято. Существующие файлы сохранены.",
+  "repositoryRegistrationPending": "Репозиторий находится в {path}. Повторите подключение, чтобы завершить регистрацию в NDS.",
+  "repositoryRelocationRequired": "Сохранённая привязка использует другое расположение. Сначала проверьте перенос репозитория.",
+  "repositoryUnsupported": "Локальное подключение репозиториев не поддерживается на этом устройстве.",
+  "repositoryWrongRemote": "Git origin или сохранённый идентификатор не соответствует выбранному репозиторию.",
   "resend": "Отправить новый код",
   "responseError": "Ответ сервера не соответствует протоколу NDS.",
   "result": "Результат",
@@ -958,6 +978,7 @@ export type MessageArgs = {
   "passkeysTitle": undefined;
   "permissionClipboard": undefined;
   "permissionCredentialStore": undefined;
+  "permissionGitWrite": undefined;
   "permissionLocalNetwork": undefined;
   "permissionProcessExecution": undefined;
   "permissionReadOnly": undefined;
@@ -975,7 +996,16 @@ export type MessageArgs = {
   "refreshDevices": undefined;
   "registerPasskey": undefined;
   "remoteFreshness": undefined;
+  "repositoryConnect": undefined;
+  "repositoryConnected": { "path": string };
+  "repositoryDifferentInstallation": undefined;
+  "repositoryIntentQueued": undefined;
   "repositoryPath": undefined;
+  "repositoryPathOccupied": undefined;
+  "repositoryRegistrationPending": { "path": string };
+  "repositoryRelocationRequired": undefined;
+  "repositoryUnsupported": undefined;
+  "repositoryWrongRemote": undefined;
   "resend": undefined;
   "responseError": undefined;
   "result": undefined;
