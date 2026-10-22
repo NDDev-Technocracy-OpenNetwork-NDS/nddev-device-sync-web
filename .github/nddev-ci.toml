@@ -5,7 +5,7 @@ profiles = ["typescript-javascript"]
 toolchain = ["bun", "--version"]
 format = ["bun", "x", "biome", "format", "src", "scripts", "vite.config.ts"]
 lint = ["bun", "run", "lint"]
-type = ["bun", "run", "typecheck"]
+type = ["bun", "run", "typecheck:ci"]
 test = ["bun", "run", "test:ci"]
 build = ["bun", "run", "build"]
 
