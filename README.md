@@ -81,3 +81,5 @@ Organizations/Accounts Rust client. Administrative changes are
 online; an uncertain command can be retried without replacing its identity.
 Invitation fragments are captured and cleared in Rust before routing;
 there is no token in a presentation DTO or persistent invitation cache.
+
+Release journals live in [GitHub Releases](https://github.com/NDDev-Technocracy-OpenNetwork-NDS/nddev-device-sync-web/releases).
