@@ -259,6 +259,13 @@ export const en = {
   "repositoryPathOccupied": "This location is already occupied. Existing files were preserved.",
   "repositoryRegistrationPending": "Checkout exists at {path}. Retry connection to finish NDS registration.",
   "repositoryRelocationRequired": "The saved connection uses another location. Review its move before connecting here.",
+  "repositorySyncCurrent": "Commits are up to date",
+  "repositorySyncDirty": "Uncommitted changes preserved; synchronization paused for this checkout",
+  "repositorySyncDiverged": "Histories diverged; changes preserved",
+  "repositorySyncFastForwarded": "Checkout fast-forwarded",
+  "repositorySyncPublished": "Existing commits published",
+  "repositorySyncRefused": "Synchronization refused; existing work preserved",
+  "repositorySyncRunning": "Synchronizing existing commits…",
   "repositoryUnsupported": "Local checkout connection is not supported on this device.",
   "repositoryWrongRemote": "The Git origin or stored repository identity does not match the selected repository.",
   "resend": "Send another code",
@@ -632,6 +639,13 @@ export const ru = {
   "repositoryPathOccupied": "Это место уже занято. Существующие файлы сохранены.",
   "repositoryRegistrationPending": "Репозиторий находится в {path}. Повторите подключение, чтобы завершить регистрацию в NDS.",
   "repositoryRelocationRequired": "Сохранённая привязка использует другое расположение. Сначала проверьте перенос репозитория.",
+  "repositorySyncCurrent": "Коммиты синхронизированы",
+  "repositorySyncDirty": "Незакоммиченные изменения сохранены; синхронизация этого checkout отложена",
+  "repositorySyncDiverged": "Истории разошлись; изменения сохранены",
+  "repositorySyncFastForwarded": "Checkout обновлён без слияния",
+  "repositorySyncPublished": "Существующие коммиты отправлены",
+  "repositorySyncRefused": "В синхронизации отказано; существующая работа сохранена",
+  "repositorySyncRunning": "Синхронизация существующих коммитов…",
   "repositoryUnsupported": "Локальное подключение репозиториев не поддерживается на этом устройстве.",
   "repositoryWrongRemote": "Git origin или сохранённый идентификатор не соответствует выбранному репозиторию.",
   "resend": "Отправить новый код",
@@ -1004,6 +1018,13 @@ export type MessageArgs = {
   "repositoryPathOccupied": undefined;
   "repositoryRegistrationPending": { "path": string };
   "repositoryRelocationRequired": undefined;
+  "repositorySyncCurrent": undefined;
+  "repositorySyncDirty": undefined;
+  "repositorySyncDiverged": undefined;
+  "repositorySyncFastForwarded": undefined;
+  "repositorySyncPublished": undefined;
+  "repositorySyncRefused": undefined;
+  "repositorySyncRunning": undefined;
   "repositoryUnsupported": undefined;
   "repositoryWrongRemote": undefined;
   "resend": undefined;
