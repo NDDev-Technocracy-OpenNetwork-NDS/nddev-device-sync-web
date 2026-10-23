@@ -16,7 +16,7 @@ spec:
     id: nds
     root: github:NDDev-Technocracy-OpenNetwork-NDS/nddev-device-sync
   portfolios:
-  - portfolio:nddev-opennetwork
+  - portfolio:nddev-technocracy-opennetwork-nds
   variations:
   - paths: [.gds]
     purpose: config
