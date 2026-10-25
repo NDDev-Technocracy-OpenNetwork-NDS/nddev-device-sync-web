@@ -213,7 +213,11 @@ export function VaultPage() {
                             if (secret.current) secret.current.value = "";
                             setEditing(record);
                             setDraftId(new_vault_record_id());
-                            form.reset({ title: record.title, username: record.username });
+                            // Keep create defaults stable when React refreshes form options.
+                            form.reset(
+                              { title: record.title, username: record.username },
+                              { keepDefaultValues: true },
+                            );
                           }}
                         >
                           {t("vaultEdit")}
