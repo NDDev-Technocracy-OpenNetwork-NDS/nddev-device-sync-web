@@ -5,6 +5,30 @@ export const en = {
   "aheadBehind": "Ahead / behind",
   "alertsTitle": "Alerts",
   "appTitle": "NDDev OpenNetwork",
+  "appUpdateAvailable": "A verified update is available to download.",
+  "appUpdateBusy": "Another update operation is running. Try again when it finishes.",
+  "appUpdateCancel": "Cancel download",
+  "appUpdateCancelled": "The download was cancelled.",
+  "appUpdateCheck": "Check for updates",
+  "appUpdateChecking": "Checking the update…",
+  "appUpdateCompatibility": "Data compatibility is unknown or unsupported.",
+  "appUpdateDownload": "Download update",
+  "appUpdateDownloading": "Downloading the update…",
+  "appUpdateIdle": "Check for an application update.",
+  "appUpdateInvalid": "The update is invalid or the download is incomplete.",
+  "appUpdateNetwork": "The update could not be retrieved from an approved source.",
+  "appUpdateNotConfigured": "Application updates are not configured for this build.",
+  "appUpdateNotNewer": "This candidate is not newer than the installed application.",
+  "appUpdateProgress": "{downloaded} / {total} bytes",
+  "appUpdateSignature": "The update publisher or signed manifest could not be verified.",
+  "appUpdateSource": "The update does not match the candidate approved for this build.",
+  "appUpdateStaged": "The download is verified and saved. Installation is not available in this build.",
+  "appUpdateStorage": "The update could not be safely saved or restored.",
+  "appUpdateTimeout": "The update operation timed out. Try again.",
+  "appUpdateTitle": "NDS application updates",
+  "appUpdateTooLarge": "The download does not match its expected size.",
+  "appUpdateUnsupported": "Application updates are not supported on this platform.",
+  "appUpdateVersion": "Candidate {version}",
   "aptObserve": "APT package observation",
   "authError": "Sign-in could not be confirmed. Check the code or start again.",
   "awaitApproval": "Waiting for explicit browser approval",
@@ -385,6 +409,30 @@ export const ru = {
   "aheadBehind": "Впереди / позади",
   "alertsTitle": "Предупреждения",
   "appTitle": "NDDev OpenNetwork",
+  "appUpdateAvailable": "Проверенное обновление доступно для загрузки.",
+  "appUpdateBusy": "Уже выполняется другая операция обновления. Дождитесь её завершения.",
+  "appUpdateCancel": "Отменить загрузку",
+  "appUpdateCancelled": "Загрузка отменена.",
+  "appUpdateCheck": "Проверить обновления",
+  "appUpdateChecking": "Проверяем обновление…",
+  "appUpdateCompatibility": "Совместимость данных неизвестна или не поддерживается.",
+  "appUpdateDownload": "Скачать обновление",
+  "appUpdateDownloading": "Загружаем обновление…",
+  "appUpdateIdle": "Проверьте наличие обновления приложения.",
+  "appUpdateInvalid": "Обновление недействительно или загрузка не завершена.",
+  "appUpdateNetwork": "Не удалось получить обновление из разрешённого источника.",
+  "appUpdateNotConfigured": "Для этой сборки обновление приложения не настроено.",
+  "appUpdateNotNewer": "Версия кандидата не новее установленного приложения.",
+  "appUpdateProgress": "{downloaded} / {total} байт",
+  "appUpdateSignature": "Не удалось проверить издателя или подписанное описание обновления.",
+  "appUpdateSource": "Обновление не соответствует разрешённому кандидату этой сборки.",
+  "appUpdateStaged": "Загрузка проверена и сохранена. Установка в этой сборке пока недоступна.",
+  "appUpdateStorage": "Не удалось безопасно сохранить или восстановить обновление.",
+  "appUpdateTimeout": "Время операции обновления истекло. Попробуйте ещё раз.",
+  "appUpdateTitle": "Обновления приложения NDS",
+  "appUpdateTooLarge": "Размер загрузки не совпадает с ожидаемым.",
+  "appUpdateUnsupported": "Обновление приложения на этой платформе не поддерживается.",
+  "appUpdateVersion": "Кандидат {version}",
   "aptObserve": "Проверка пакетов APT",
   "authError": "Не удалось подтвердить вход. Проверьте код или начните заново.",
   "awaitApproval": "Ожидается подтверждение в браузере",
@@ -764,6 +812,30 @@ export type MessageArgs = {
   "aheadBehind": undefined;
   "alertsTitle": undefined;
   "appTitle": undefined;
+  "appUpdateAvailable": undefined;
+  "appUpdateBusy": undefined;
+  "appUpdateCancel": undefined;
+  "appUpdateCancelled": undefined;
+  "appUpdateCheck": undefined;
+  "appUpdateChecking": undefined;
+  "appUpdateCompatibility": undefined;
+  "appUpdateDownload": undefined;
+  "appUpdateDownloading": undefined;
+  "appUpdateIdle": undefined;
+  "appUpdateInvalid": undefined;
+  "appUpdateNetwork": undefined;
+  "appUpdateNotConfigured": undefined;
+  "appUpdateNotNewer": undefined;
+  "appUpdateProgress": { "downloaded": string; "total": string };
+  "appUpdateSignature": undefined;
+  "appUpdateSource": undefined;
+  "appUpdateStaged": undefined;
+  "appUpdateStorage": undefined;
+  "appUpdateTimeout": undefined;
+  "appUpdateTitle": undefined;
+  "appUpdateTooLarge": undefined;
+  "appUpdateUnsupported": undefined;
+  "appUpdateVersion": { "version": string };
   "aptObserve": undefined;
   "authError": undefined;
   "awaitApproval": undefined;
