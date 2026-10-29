@@ -33,10 +33,34 @@ export const en = {
   "authError": "Sign-in could not be confirmed. Check the code or start again.",
   "awaitApproval": "Waiting for explicit browser approval",
   "branch": "Branch",
+  "browserAllowWork": "Allow this agent’s browser work",
+  "browserAutomation": "Browser automation",
+  "browserControlScope": "Allows agents to automate tabs in NDS groups. Other browser tabs remain outside this permission.",
+  "browserExtensionStatus": "Extension",
+  "browserHostStatus": "Browser",
+  "browserOwnerSwitch": "Browser owner switch",
   "browserPrivacy": "The session stays in a protected browser cookie. Vault keys are encrypted in this browser profile; the server delivers them after verified sign-in and device enrollment.",
+  "browserSessionCount": "Browser sessions",
+  "browserSessionScope": "This list includes the browser host’s sessions. It does not grant control over sessions owned by another agent.",
   "browserStorageEvictable": "The browser may remove site data under storage pressure. Unsynchronized changes would be lost.",
   "browserStoragePersistent": "The browser granted persistent storage. Clearing site data still removes local changes.",
+  "browserSwitchDisabled": "Disabled",
+  "browserSwitchEnabled": "Enabled",
+  "browserTabCount": "Tabs: {count}",
   "browserVaultHelp": "Your vault opens automatically after sign-in. Changes are stored encrypted in this browser and synchronize through the server. Keep this browser’s site data until all changes are synchronized.",
+  "cacheAssemblyInvalid": "Cache configuration is invalid for this app.",
+  "cacheBindTools": "Use cache for downloads",
+  "cacheCompletionUnconfirmed": "Could not confirm the changes. Further changes are blocked.",
+  "cacheConfiguredPort": "Configured loopback port",
+  "cacheManagedAbsent": "Managed settings not detected",
+  "cacheManagedPresent": "Managed settings present",
+  "cacheManagedScope": "Managed settings are shown separately from reachability. This does not confirm that existing tools use the configured port.",
+  "cacheMutationWorking": "Applying download settings…",
+  "cacheProbeReady": "Responding",
+  "cacheProbeUnavailable": "Not responding",
+  "cacheReachability": "Cache reachability",
+  "cacheStateUncertain": "Download settings may have changed. Refresh status before another action.",
+  "cacheUnbindTools": "Use direct downloads",
   "cancel": "Cancel sign-in",
   "cancelledError": "Sign-in cancelled.",
   "catalogAccessEnd": "End of the list available to this credential. Other access scopes may include more repositories.",
@@ -230,8 +254,10 @@ export const en = {
   "moduleSave": "Save module settings",
   "moduleSaved": "Settings saved on this device; synchronization continues separately.",
   "moduleSettingsChanged": "Module settings changed. Refresh the form before saving your choice.",
+  "moduleShutdownUnconfirmed": "Shutdown could not be confirmed. Access remains closed.",
   "moduleStateQueued": "Local states queued for synchronization.",
   "moreIncidents": "Next incidents",
+  "networkCache": "Network cache",
   "networkError": "The server could not be reached. No fresh session state is confirmed.",
   "networkReceive": "Network receive rate",
   "networkSend": "Network send rate",
@@ -255,6 +281,7 @@ export const en = {
   "passkeysEmpty": "No passkeys registered.",
   "passkeysHelp": "Removing a passkey ends sessions created with it. Removal requires signing in within the last five minutes.",
   "passkeysTitle": "Your passkeys",
+  "permissionBrowserControl": "Control agent browser tabs",
   "permissionClipboard": "Use clipboard features",
   "permissionCredentialStore": "Use protected credential references",
   "permissionGitWrite": "Create checkouts and synchronize existing Git commits",
@@ -262,6 +289,7 @@ export const en = {
   "permissionProcessExecution": "Run the declared local tool",
   "permissionReadOnly": "Read local information",
   "permissionUserService": "Use the current user service",
+  "personalContextServerRequired": "Update the NDS server before using this version of the client.",
   "preview": "Preview",
   "privacy": "Session credentials and vault keys stay in native secure storage. The server delivers your vault key after verified sign-in and device enrollment.",
   "providerFailed": "The local tool could not complete this request.",
@@ -437,10 +465,34 @@ export const ru = {
   "authError": "Не удалось подтвердить вход. Проверьте код или начните заново.",
   "awaitApproval": "Ожидается подтверждение в браузере",
   "branch": "Ветка",
+  "browserAllowWork": "Разрешить работу этого агента в браузере",
+  "browserAutomation": "Автоматизация браузера",
+  "browserControlScope": "Разрешает агентам автоматизацию вкладок в группах NDS. На остальные вкладки браузера это разрешение не распространяется.",
+  "browserExtensionStatus": "Расширение",
+  "browserHostStatus": "Браузер",
+  "browserOwnerSwitch": "Переключатель владельца браузера",
   "browserPrivacy": "Сессия хранится в защищённой cookie. Ключи vault зашифрованы в профиле браузера; сервер передаёт их после подтверждённого входа и регистрации устройства.",
+  "browserSessionCount": "Сессии браузера",
+  "browserSessionScope": "Здесь показаны сессии хоста браузера. Этот список не даёт управление сессиями другого агента.",
   "browserStorageEvictable": "При нехватке места браузер может удалить данные сайта. Несинхронизированные изменения будут потеряны.",
   "browserStoragePersistent": "Браузер разрешил постоянное хранение. Очистка данных сайта всё равно удалит локальные изменения.",
+  "browserSwitchDisabled": "Выключен",
+  "browserSwitchEnabled": "Включён",
+  "browserTabCount": "Вкладок: {count}",
   "browserVaultHelp": "Vault открывается автоматически после входа. Изменения хранятся в браузере в зашифрованном виде и синхронизируются через сервер. Сохраняйте данные сайта, пока все изменения не синхронизированы.",
+  "cacheAssemblyInvalid": "Настройка кеша для этого приложения недействительна.",
+  "cacheBindTools": "Загружать через кеш",
+  "cacheCompletionUnconfirmed": "Не удалось подтвердить изменения. Новые изменения заблокированы.",
+  "cacheConfiguredPort": "Заданный локальный порт",
+  "cacheManagedAbsent": "Управляемые настройки не найдены",
+  "cacheManagedPresent": "Управляемые настройки найдены",
+  "cacheManagedScope": "Управляемые настройки показаны отдельно от доступности кеша. Это не подтверждает, что запущенные инструменты используют заданный порт.",
+  "cacheMutationWorking": "Применяются настройки загрузки…",
+  "cacheProbeReady": "Отвечает",
+  "cacheProbeUnavailable": "Не отвечает",
+  "cacheReachability": "Доступность кеша",
+  "cacheStateUncertain": "Настройки загрузки могли измениться. Обновите статус перед следующим действием.",
+  "cacheUnbindTools": "Загружать напрямую",
   "cancel": "Отменить вход",
   "cancelledError": "Вход отменён.",
   "catalogAccessEnd": "Конец списка, доступного этим учётным данным. При другом доступе список может содержать больше репозиториев.",
@@ -634,8 +686,10 @@ export const ru = {
   "moduleSave": "Сохранить настройки модуля",
   "moduleSaved": "Настройки сохранены на этом устройстве; синхронизация выполняется отдельно.",
   "moduleSettingsChanged": "Настройки модуля изменились. Обновите форму перед сохранением своего выбора.",
+  "moduleShutdownUnconfirmed": "Не удалось подтвердить завершение работы. Доступ остаётся закрытым.",
   "moduleStateQueued": "Локальные состояния поставлены в очередь синхронизации.",
   "moreIncidents": "Следующие инциденты",
+  "networkCache": "Сетевой кеш",
   "networkError": "Сервер недоступен. Актуальное состояние сессии не подтверждено.",
   "networkReceive": "Приём данных",
   "networkSend": "Передача данных",
@@ -659,6 +713,7 @@ export const ru = {
   "passkeysEmpty": "Ключи доступа не зарегистрированы.",
   "passkeysHelp": "Удаление ключа завершает созданные с ним сессии. Для удаления нужно войти в систему в течение последних пяти минут.",
   "passkeysTitle": "Ваши ключи доступа",
+  "permissionBrowserControl": "Управление вкладками браузера агента",
   "permissionClipboard": "Использование буфера обмена",
   "permissionCredentialStore": "Использование защищённых учётных данных",
   "permissionGitWrite": "Подключать репозитории и синхронизировать Git-коммиты",
@@ -666,6 +721,7 @@ export const ru = {
   "permissionProcessExecution": "Запуск заявленного локального инструмента",
   "permissionReadOnly": "Чтение локальных сведений",
   "permissionUserService": "Доступ к сервису текущего пользователя",
+  "personalContextServerRequired": "Обновите сервер NDS для работы с этой версией клиента.",
   "preview": "Предпросмотр",
   "privacy": "Данные сессии и ключи vault хранятся в защищённом хранилище ОС. Сервер передаёт ключ vault после подтверждённого входа и регистрации устройства.",
   "providerFailed": "Локальный инструмент не выполнил запрос.",
@@ -840,10 +896,34 @@ export type MessageArgs = {
   "authError": undefined;
   "awaitApproval": undefined;
   "branch": undefined;
+  "browserAllowWork": undefined;
+  "browserAutomation": undefined;
+  "browserControlScope": undefined;
+  "browserExtensionStatus": undefined;
+  "browserHostStatus": undefined;
+  "browserOwnerSwitch": undefined;
   "browserPrivacy": undefined;
+  "browserSessionCount": undefined;
+  "browserSessionScope": undefined;
   "browserStorageEvictable": undefined;
   "browserStoragePersistent": undefined;
+  "browserSwitchDisabled": undefined;
+  "browserSwitchEnabled": undefined;
+  "browserTabCount": { "count": string };
   "browserVaultHelp": undefined;
+  "cacheAssemblyInvalid": undefined;
+  "cacheBindTools": undefined;
+  "cacheCompletionUnconfirmed": undefined;
+  "cacheConfiguredPort": undefined;
+  "cacheManagedAbsent": undefined;
+  "cacheManagedPresent": undefined;
+  "cacheManagedScope": undefined;
+  "cacheMutationWorking": undefined;
+  "cacheProbeReady": undefined;
+  "cacheProbeUnavailable": undefined;
+  "cacheReachability": undefined;
+  "cacheStateUncertain": undefined;
+  "cacheUnbindTools": undefined;
   "cancel": undefined;
   "cancelledError": undefined;
   "catalogAccessEnd": undefined;
@@ -1037,8 +1117,10 @@ export type MessageArgs = {
   "moduleSave": undefined;
   "moduleSaved": undefined;
   "moduleSettingsChanged": undefined;
+  "moduleShutdownUnconfirmed": undefined;
   "moduleStateQueued": undefined;
   "moreIncidents": undefined;
+  "networkCache": undefined;
   "networkError": undefined;
   "networkReceive": undefined;
   "networkSend": undefined;
@@ -1062,6 +1144,7 @@ export type MessageArgs = {
   "passkeysEmpty": undefined;
   "passkeysHelp": undefined;
   "passkeysTitle": undefined;
+  "permissionBrowserControl": undefined;
   "permissionClipboard": undefined;
   "permissionCredentialStore": undefined;
   "permissionGitWrite": undefined;
@@ -1069,6 +1152,7 @@ export type MessageArgs = {
   "permissionProcessExecution": undefined;
   "permissionReadOnly": undefined;
   "permissionUserService": undefined;
+  "personalContextServerRequired": undefined;
   "preview": undefined;
   "privacy": undefined;
   "providerFailed": undefined;
