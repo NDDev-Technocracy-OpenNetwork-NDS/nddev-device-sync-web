@@ -16,6 +16,8 @@ export function permissionLabel(value: string): SimpleMessageKey {
       return "permissionClipboard";
     case "git_write":
       return "permissionGitWrite";
+    case "browser_control":
+      return "permissionBrowserControl";
     default:
       return "modulePermissions";
   }
@@ -52,6 +54,10 @@ export function moduleLabel(value: string): SimpleMessageKey | null {
       return "cleaner";
     case "updater":
       return "updater";
+    case "browser-use":
+      return "browserAutomation";
+    case "cache":
+      return "networkCache";
     default:
       return null;
   }
