@@ -5,7 +5,7 @@ import { createHash, randomUUID } from "node:crypto";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 import { setTimeout as delay } from "node:timers/promises";
-import { type Browser, chromium, type Page } from "playwright";
+import { type Browser, chromium, type Page, type Request } from "playwright";
 import { object } from "./inputs";
 
 function loopback(value: unknown): string {
@@ -74,6 +74,9 @@ test("real organizations preserve the personal Vault and retry the exact lost-AC
     errors: string[] = [],
     hashes: string[] = [];
   const statuses: { method: string; status: number }[] = [];
+  const reconnects = new WeakSet<Request>();
+  let lostAcknowledgement = false;
+  let verifiedConnections = 0;
   const deadline = setTimeout(() => {
     void browser?.close().catch(() => {});
   }, 230000);
@@ -86,7 +89,12 @@ test("real organizations preserve the personal Vault and retry the exact lost-AC
     page = await context.newPage();
     page.setDefaultTimeout(20000);
     page.on("pageerror", (error) => errors.push(error.name));
+    page.on("request", (request) => {
+      if (lostAcknowledgement && new URL(request.url()).pathname === "/v2/session/renew")
+        reconnects.add(request);
+    });
     page.on("response", (response) => {
+      if (reconnects.has(response.request()) && response.status() === 200) verifiedConnections++;
       if (new URL(response.url()).pathname.startsWith("/v3/organizations") && statuses.length < 32)
         statuses.push({ method: response.request().method(), status: response.status() });
     });
@@ -109,6 +117,7 @@ test("real organizations preserve the personal Vault and retry the exact lost-AC
           } finally {
             await accepted.dispose();
           }
+          lostAcknowledgement = true;
           await route.abort("failed"); // Actual effect committed; caller learns no ACK.
           return;
         }
@@ -169,6 +178,10 @@ test("real organizations preserve the personal Vault and retry the exact lost-AC
     await until(async () => await retry.isEnabled());
     assert.equal(hashes.length, 1);
     assert.equal(await selector.isEnabled(), false);
+    // Losing a response closes online admission. The existing reconciliation
+    // owner must verify the connection before this explicit effect retry;
+    // neither a retained command nor a successful collection read grants it.
+    await until(async () => verifiedConnections > 0);
     await retry.click();
     await until(
       async () => (await selector.isEnabled()) && (await selector.locator("option").count()) === 3,
@@ -212,6 +225,7 @@ test("real organizations preserve the personal Vault and retry the exact lost-AC
             .slice(0, 3)
             .map((text) => text.slice(0, 160)),
           statuses,
+          verifiedConnections,
           errors,
         }),
       );
