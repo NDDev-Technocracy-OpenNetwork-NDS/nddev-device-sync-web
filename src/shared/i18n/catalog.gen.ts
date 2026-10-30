@@ -122,11 +122,14 @@ export const en = {
   "code": "Eight-digit code",
   "companyActive": "Active",
   "companyAdmin": "Administrator",
-  "companyChangeHelp": "Apply this membership change to {member}? Removing a member ends their active sessions; their personal data is retained.",
+  "companyChangeHelp": "Apply this membership change to {member}? Removing membership closes organization access; personal sessions and data remain separate.",
   "companyChangeRole": "Change role",
   "companyCompleted": "The server confirmed the change. Refresh to see the current state.",
   "companyConfirm": "Confirm",
   "companyConflict": "The member changed since this page was loaded. Review the current state.",
+  "companyContextClosed": "This context is closed. Refresh memberships or sign in again before another action.",
+  "companyCreate": "Create organization",
+  "companyCreateHelp": "This action uses your personal identity and creates a separate organization with you as its first administrator.",
   "companyDeliveryAccepted": "Mail: accepted by the mail service",
   "companyDeliveryFailed": "Mail: not sent",
   "companyDeliveryHelp": "Sending an invitation, acceptance by the mail service and joining the company are separate steps. Links expire after seven days.",
@@ -134,7 +137,7 @@ export const en = {
   "companyDeliveryUnknown": "Mail: delivery result unknown",
   "companyDenied": "Your current membership does not allow this action.",
   "companyExpired": "The command has expired. Review the current state before a new action.",
-  "companyInvalid": "Check the email address and selected action.",
+  "companyInvalid": "Check the organization name, email address and selected action.",
   "companyInvitationUnavailable": "This invitation or recipient is no longer available for this action.",
   "companyInvite": "Invite by email",
   "companyInviteExpired": "Expired",
@@ -143,16 +146,22 @@ export const en = {
   "companyJoined": "Joined",
   "companyLastAdmin": "The last active administrator cannot be removed or demoted.",
   "companyMembers": "Members",
+  "companyName": "Organization name",
   "companyNextInvitations": "Next invitations",
   "companyNextMembers": "Next members",
   "companyPending": "The original command is retained for retry. If the connection failed, the server may have applied it. Review the current state before creating another command. Closing this screen does not resend it.",
-  "companyPrivacy": "Company administration is online. Personal Vault, secrets and repositories remain private to their owner.",
+  "companyPersonal": "Personal space",
+  "companyPersonalHelp": "Organization membership does not change your personal storage owner. Select an organization to view its current membership.",
+  "companyPrivacy": "Organization administration is online. Your personal Vault, secrets and repositories keep their original owner.",
   "companyRemove": "Remove member",
   "companyRemoved": "Removed",
   "companyRetry": "Retry the same command",
   "companyReview": "Review state and finish this command",
+  "companyReviewedUnknown": "Current authorized state was reviewed. Finishing the retained command does not undo any previously submitted change.",
   "companyRevoke": "Revoke invitation",
-  "companyTitle": "Company",
+  "companyServerRequired": "This server does not support explicit organization contexts. No other company is selected automatically.",
+  "companySpace": "Space",
+  "companyTitle": "Organizations",
   "companyUser": "User",
   "conflicts": "Conflicts",
   "connect": "Connect",
@@ -554,11 +563,14 @@ export const ru = {
   "code": "Восьмизначный код",
   "companyActive": "Активен",
   "companyAdmin": "Администратор",
-  "companyChangeHelp": "Применить изменение к {member}? Удаление участника завершает его активные сессии; личные данные сохраняются.",
+  "companyChangeHelp": "Применить изменение к {member}? Удаление членства закрывает доступ к организации; личные сессии и данные остаются отдельными.",
   "companyChangeRole": "Изменить роль",
   "companyCompleted": "Сервер подтвердил изменение. Обновите данные, чтобы увидеть текущее состояние.",
   "companyConfirm": "Подтвердить",
   "companyConflict": "Данные участника изменились после загрузки. Проверьте текущее состояние.",
+  "companyContextClosed": "Этот контекст закрыт. Обновите членство или войдите снова перед следующим действием.",
+  "companyCreate": "Создать организацию",
+  "companyCreateHelp": "Действие выполняется от вашей личной учётной записи и создаёт отдельную организацию, где вы будете первым администратором.",
   "companyDeliveryAccepted": "Письмо: принято почтовым сервисом",
   "companyDeliveryFailed": "Письмо: не отправлено",
   "companyDeliveryHelp": "Создание приглашения, принятие почтовым сервисом и вступление в компанию — отдельные шаги. Ссылка действует семь дней.",
@@ -566,7 +578,7 @@ export const ru = {
   "companyDeliveryUnknown": "Письмо: результат отправки неизвестен",
   "companyDenied": "Ваша текущая роль не разрешает это действие.",
   "companyExpired": "Срок команды истёк. Проверьте текущее состояние перед новым действием.",
-  "companyInvalid": "Проверьте email и выбранное действие.",
+  "companyInvalid": "Проверьте название организации, email и выбранное действие.",
   "companyInvitationUnavailable": "Это приглашение или получатель больше недоступны для действия.",
   "companyInvite": "Пригласить по email",
   "companyInviteExpired": "Истекло",
@@ -575,16 +587,22 @@ export const ru = {
   "companyJoined": "Вступил",
   "companyLastAdmin": "Нельзя удалить последнего активного администратора или понизить его роль.",
   "companyMembers": "Участники",
+  "companyName": "Название организации",
   "companyNextInvitations": "Следующие приглашения",
   "companyNextMembers": "Следующие участники",
   "companyPending": "Исходная команда сохранена для повтора. При сбое связи сервер мог её выполнить. Проверьте состояние перед новой командой. Закрытие экрана не повторяет отправку.",
-  "companyPrivacy": "Управление компанией доступно онлайн. Личный Vault, секреты и репозитории доступны только владельцу.",
+  "companyPersonal": "Личное пространство",
+  "companyPersonalHelp": "Членство в организации не меняет владельца личного хранилища. Выберите организацию, чтобы посмотреть текущее членство.",
+  "companyPrivacy": "Управление организацией работает онлайн. Личный Vault, секреты и репозитории сохраняют исходного владельца.",
   "companyRemove": "Удалить участника",
   "companyRemoved": "Удалён",
   "companyRetry": "Повторить исходную команду",
   "companyReview": "Проверить состояние и завершить эту команду",
+  "companyReviewedUnknown": "Текущее доступное состояние просмотрено. Завершение сохранённой команды не отменяет ранее отправленные изменения.",
   "companyRevoke": "Отозвать приглашение",
-  "companyTitle": "Компания",
+  "companyServerRequired": "Этот сервер не поддерживает явный контекст организации. Другая компания автоматически не выбирается.",
+  "companySpace": "Пространство",
+  "companyTitle": "Организации",
   "companyUser": "Пользователь",
   "conflicts": "Конфликты",
   "connect": "Подключиться",
@@ -990,6 +1008,9 @@ export type MessageArgs = {
   "companyCompleted": undefined;
   "companyConfirm": undefined;
   "companyConflict": undefined;
+  "companyContextClosed": undefined;
+  "companyCreate": undefined;
+  "companyCreateHelp": undefined;
   "companyDeliveryAccepted": undefined;
   "companyDeliveryFailed": undefined;
   "companyDeliveryHelp": undefined;
@@ -1006,15 +1027,21 @@ export type MessageArgs = {
   "companyJoined": undefined;
   "companyLastAdmin": undefined;
   "companyMembers": undefined;
+  "companyName": undefined;
   "companyNextInvitations": undefined;
   "companyNextMembers": undefined;
   "companyPending": undefined;
+  "companyPersonal": undefined;
+  "companyPersonalHelp": undefined;
   "companyPrivacy": undefined;
   "companyRemove": undefined;
   "companyRemoved": undefined;
   "companyRetry": undefined;
   "companyReview": undefined;
+  "companyReviewedUnknown": undefined;
   "companyRevoke": undefined;
+  "companyServerRequired": undefined;
+  "companySpace": undefined;
   "companyTitle": undefined;
   "companyUser": undefined;
   "conflicts": undefined;

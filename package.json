@@ -11,10 +11,12 @@
     "generate:worker": "bun run scripts/generate-worker.ts",
     "check:worker": "bun run scripts/generate-worker.ts --check",
     "lint": "biome check src scripts/*.ts vite.config.ts",
+    "test:organizations-browser": "bun test scripts/organizations-browser.test.ts",
+    "test:organizations": "bun test src/pages/company/organization-owner.test.ts",
     "test:worker": "node --test scripts/offline-worker.test.ts",
     "build:ui": "vite build",
     "build": "bun run scripts/build-react.ts",
-    "test:ci": "bunx playwright install --with-deps chromium && node --test --test-reporter=junit --test-reporter-destination=.nddev-reports/web.xml scripts/offline-worker.test.ts"
+    "test:ci": "bun run test:organizations && bunx playwright install --with-deps chromium && node --test --test-reporter=junit --test-reporter-destination=.nddev-reports/web.xml scripts/offline-worker.test.ts"
   },
   "dependencies": {
     "@base-ui/react": "1.9.0",

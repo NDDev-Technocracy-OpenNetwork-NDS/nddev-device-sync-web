@@ -1,19 +1,21 @@
 import type {
   CompanyCommand,
+  Organization,
   OrganizationDeliveryView,
   OrganizationInvitationStatusView,
+  OrganizationMemberView,
   OrganizationRoleView,
 } from "@nds/runtime";
 import { useForm } from "@tanstack/react-form";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { errorMessage } from "@/shared/api/errors";
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { useRuntime } from "@/shared/api/runtime";
 import { type SimpleMessageKey, useText } from "@/shared/i18n";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
+
+import { OrganizationOwner } from "./organization-owner";
 
 const delivery: Record<OrganizationDeliveryView, SimpleMessageKey> = {
   Pending: "companyDeliveryPending",
@@ -32,113 +34,71 @@ function selectedRole(value: string): OrganizationRoleView {
   throw new Error("invalid_input");
 }
 export function CompanyPage() {
-  const { client, scope, view } = useRuntime();
+  const { client, scope, busy, workPermitted } = useRuntime();
   const { t } = useText();
-  const cache = useQueryClient();
+  const owner = useMemo(() => new OrganizationOwner(client, scope), [client, scope]);
+  const state = useSyncExternalStore(owner.subscribe, owner.snapshot);
   const [memberCursor, setMemberCursor] = useState<string | null>(null);
   const [inviteCursor, setInviteCursor] = useState<string | null>(null);
-  const overview = useQuery({
-    queryKey: ["company", scope],
-    queryFn: () => client.company(),
-    enabled: view.authenticated,
-    refetchInterval: 15_000,
-  });
-  const administrator =
-    !overview.isError &&
-    overview.data?.member.active === true &&
-    overview.data.member.role === "Admin";
-  const members = useQuery({
-    queryKey: ["company-members", scope, memberCursor],
-    queryFn: () => client.company_members(memberCursor),
-    enabled: administrator,
-    refetchInterval: 15_000,
-  });
-  const invitations = useQuery({
-    queryKey: ["company-invitations", scope, inviteCursor],
-    queryFn: () => client.company_invitations(inviteCursor),
-    enabled: administrator,
-    refetchInterval: 15_000,
-  });
-  const command = useRef<CompanyCommand | null>(null);
-  const operation = useRef<Promise<void> | null>(null);
-  const mounted = useRef(true);
-  const [working, setWorking] = useState(false);
-  const [pending, setPending] = useState(false);
-  const [completed, setCompleted] = useState(false);
-  const [error, setError] = useState<SimpleMessageKey | null>(null);
-  const release = useCallback(() => {
-    const owned = command.current;
-    command.current = null;
-    if (owned) {
-      const running = operation.current;
-      if (running)
-        void running.then(
-          () => owned.free(),
-          () => owned.free(),
-        );
-      else owned.free();
-    }
-    if (mounted.current) setPending(false);
-  }, []);
-  useEffect(
-    () => () => {
-      mounted.current = false;
-      release();
-    },
-    [release],
-  );
+  const [name, setName] = useState("");
+  const [confirmation, setConfirmation] = useState<{
+    owner: OrganizationOwner;
+    selectionToken: object;
+    member: OrganizationMemberView;
+    role: OrganizationRoleView | null;
+  } | null>(null);
   useEffect(() => {
-    if (!administrator) {
-      cache.removeQueries({ queryKey: ["company-members", scope] });
-      cache.removeQueries({ queryKey: ["company-invitations", scope] });
-    }
-  }, [administrator, cache, scope]);
-  async function refresh() {
-    await cache.invalidateQueries({ queryKey: ["company", scope] });
-    await Promise.all([
-      cache.invalidateQueries({ queryKey: ["company-members", scope] }),
-      cache.invalidateQueries({ queryKey: ["company-invitations", scope] }),
-    ]);
-  }
-  function submit(prepare?: () => Promise<CompanyCommand>) {
-    if (operation.current || (prepare && command.current)) return;
-    setWorking(true);
-    setCompleted(false);
-    setError(null);
-    const task = (async () => {
-      if (prepare) {
-        const next = await prepare();
-        if (!mounted.current) {
-          next.free();
-          return;
-        }
-        command.current = next;
-        setPending(true);
-      }
-      const current = command.current;
-      if (!current) return;
-      await current.execute();
-      if (mounted.current) {
-        release();
-        setCompleted(true);
-        await refresh();
-      }
-    })();
-    operation.current = task;
-    void task
-      .catch((error: unknown) => {
-        if (mounted.current) setError(errorMessage(error));
-      })
-      .finally(() => {
-        operation.current = null;
-        if (mounted.current) setWorking(false);
-      });
-  }
+    owner.start();
+    const clock = window.setInterval(() => owner.observe(), 1000);
+    return () => {
+      clearInterval(clock);
+      owner.stop();
+    };
+  }, [owner]);
+  useEffect(() => {
+    owner.permit(workPermitted);
+  }, [owner, workPermitted]);
+  const { overview, members, invitations, working, pending, completed, error } = state;
+  const current = owner.isCurrent();
+  const enabled = !busy && !working && !pending && workPermitted && current;
+  const administrator =
+    current && overview?.member.active === true && overview.member.role === "Admin";
   const defaults: { email: string; role: OrganizationRoleView } = { email: "", role: "User" };
   const form = useForm({
     defaultValues: defaults,
-    onSubmit: ({ value }) => submit(() => client.company_invite(value.email, value.role)),
+    onSubmitMeta: { owner, selectionToken: state.selectionToken },
+    onSubmit: ({ value, meta }) => {
+      if (meta.owner !== owner) return;
+      return owner.submit(
+        (organization) => organization.invite(value.email, value.role),
+        meta.selectionToken,
+      );
+    },
   });
+  const formContext = useRef<{ owner: OrganizationOwner; selectionToken: object } | null>(null);
+  useEffect(() => {
+    if (
+      formContext.current?.owner === owner &&
+      formContext.current.selectionToken === state.selectionToken
+    )
+      return;
+    formContext.current = { owner, selectionToken: state.selectionToken };
+    form.reset();
+    setName("");
+    setMemberCursor(null);
+    setInviteCursor(null);
+    setConfirmation(null);
+  }, [form, owner, state.selectionToken]);
+  function submit(prepare: (organization: Organization) => Promise<CompanyCommand>) {
+    void owner.submit(prepare, state.selectionToken);
+  }
+  function refresh() {
+    return owner.refresh(memberCursor, inviteCursor, state.selectionToken);
+  }
+  function change(member: OrganizationMemberView, role: OrganizationRoleView | null) {
+    if (enabled && owner.matchesSelection(state.selectionToken))
+      setConfirmation({ owner, selectionToken: state.selectionToken, member, role });
+  }
   return (
     <div className="stack">
       <Card>
@@ -149,20 +109,53 @@ export function CompanyPage() {
           <CardDescription>{t("companyPrivacy")}</CardDescription>
         </CardHeader>
         <CardContent className="stack">
-          {overview.isPending && <p role="status">{t("working")}</p>}
-          {overview.isError ? (
-            <p role="alert" className="notice">
-              {t(errorMessage(overview.error))}
-            </p>
-          ) : (
-            overview.data && (
-              <>
-                <h3>{overview.data.name}</h3>
-                <p>
-                  {overview.data.member.role === "Admin" ? t("companyAdmin") : t("companyUser")}
-                </p>
-              </>
-            )
+          <div className="field">
+            <Label htmlFor="organization-space">{t("companySpace")}</Label>
+            <select
+              id="organization-space"
+              value={state.selected}
+              disabled={!enabled}
+              onChange={(event) => {
+                void owner.select(event.target.value, state.selectionToken);
+              }}
+            >
+              <option value="">{t("companyPersonal")}</option>
+              {state.choices.map((choice) => (
+                <option key={choice.company_id} value={choice.company_id}>
+                  {choice.name} ·{" "}
+                  {choice.member.role === "Admin" ? t("companyAdmin") : t("companyUser")} ·{" "}
+                  {choice.company_id}
+                </option>
+              ))}
+            </select>
+          </div>
+          {!state.selected && <p>{t("companyPersonalHelp")}</p>}
+          <div className="field">
+            <Label htmlFor="organization-name">{t("companyName")}</Label>
+            <Input
+              id="organization-name"
+              value={name}
+              maxLength={160}
+              disabled={!enabled}
+              onChange={(event) => setName(event.target.value)}
+            />
+            <Button
+              disabled={!enabled || !name.trim()}
+              onClick={() => {
+                void owner.create(name.trim(), state.selectionToken);
+              }}
+            >
+              {t("companyCreate")}
+            </Button>
+            <p>{t("companyCreateHelp")}</p>
+          </div>
+          {working && <p role="status">{t("working")}</p>}
+          {state.closed && <p role="alert">{t("companyContextClosed")}</p>}
+          {current && overview && (
+            <>
+              <h3>{overview.name}</h3>
+              <p>{overview.member.role === "Admin" ? t("companyAdmin") : t("companyUser")}</p>
+            </>
           )}
           {error && (
             <p role="alert" className="notice">
@@ -170,23 +163,26 @@ export function CompanyPage() {
             </p>
           )}
           {completed && <p role="status">{t("companyCompleted")}</p>}
+          {state.reviewed && <p role="status">{t("companyReviewedUnknown")}</p>}
           {pending && (
             <div className="notice stack">
               <p>{t("companyPending")}</p>
               <div className="actions">
-                <Button disabled={working} onClick={() => submit()}>
+                <Button
+                  disabled={
+                    working || busy || !workPermitted || !owner.canRetry(state.commandToken)
+                  }
+                  onClick={() => {
+                    void owner.retry(state.commandToken);
+                  }}
+                >
                   {t("companyRetry")}
                 </Button>
                 <Button
                   variant="outline"
-                  disabled={working}
+                  disabled={working || busy || !workPermitted || !current}
                   onClick={() => {
-                    void overview.refetch().then((result) => {
-                      if (result.isSuccess) {
-                        release();
-                        void refresh();
-                      }
-                    });
+                    void owner.review(state.commandToken);
                   }}
                 >
                   {t("companyReview")}
@@ -196,7 +192,7 @@ export function CompanyPage() {
           )}
           <Button
             variant="outline"
-            disabled={working}
+            disabled={working || busy || !workPermitted || !current}
             onClick={() => {
               void refresh();
             }}
@@ -214,69 +210,55 @@ export function CompanyPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="stack">
-              {members.isError ? (
-                <p role="alert">{t(errorMessage(members.error))}</p>
-              ) : (
-                members.data?.members.map((member) => (
-                  <fieldset className="record stack" key={member.user_id}>
-                    <legend>{member.email ?? member.user_id}</legend>
-                    <p>
-                      {member.role === "Admin" ? t("companyAdmin") : t("companyUser")} ·{" "}
-                      {member.active ? t("companyActive") : t("companyRemoved")}
-                    </p>
-                    {member.active && (
-                      <div className="actions">
-                        <Button
-                          variant="outline"
-                          disabled={working || pending}
-                          onClick={() => {
-                            if (
-                              window.confirm(
-                                t("companyChangeHelp", { member: member.email ?? member.user_id }),
-                              )
-                            )
-                              submit(() =>
-                                client.company_change_member(
-                                  member.user_id,
-                                  member.revision,
-                                  member.role === "Admin" ? "User" : "Admin",
-                                ),
-                              );
-                          }}
-                        >
-                          {t("companyChangeRole")}
-                        </Button>
-                        <Button
-                          variant="destructive"
-                          disabled={working || pending}
-                          onClick={() => {
-                            if (
-                              window.confirm(
-                                t("companyChangeHelp", { member: member.email ?? member.user_id }),
-                              )
-                            )
-                              submit(() =>
-                                client.company_change_member(member.user_id, member.revision, null),
-                              );
-                          }}
-                        >
-                          {t("companyRemove")}
-                        </Button>
-                      </div>
-                    )}
-                  </fieldset>
-                ))
-              )}
+              {members?.members.map((member) => (
+                <fieldset className="record stack" key={member.user_id}>
+                  <legend>{member.email ?? member.user_id}</legend>
+                  <p>
+                    {member.role === "Admin" ? t("companyAdmin") : t("companyUser")} ·{" "}
+                    {member.active ? t("companyActive") : t("companyRemoved")}
+                  </p>
+                  {member.active && (
+                    <div className="actions">
+                      <Button
+                        variant="outline"
+                        disabled={!enabled}
+                        onClick={() => change(member, member.role === "Admin" ? "User" : "Admin")}
+                      >
+                        {t("companyChangeRole")}
+                      </Button>
+                      <Button
+                        variant="destructive"
+                        disabled={!enabled}
+                        onClick={() => change(member, null)}
+                      >
+                        {t("companyRemove")}
+                      </Button>
+                    </div>
+                  )}
+                </fieldset>
+              ))}
               <div className="actions">
                 {memberCursor && (
-                  <Button variant="outline" onClick={() => setMemberCursor(null)}>
+                  <Button
+                    variant="outline"
+                    disabled={working || !current}
+                    onClick={() => {
+                      setMemberCursor(null);
+                      void owner.refresh(null, inviteCursor, state.selectionToken);
+                    }}
+                  >
                     {t("moduleRefresh")}
                   </Button>
                 )}
-                {!members.isError && members.data?.next_cursor && (
+                {members?.next_cursor && (
                   <Button
                     variant="outline"
-                    onClick={() => setMemberCursor(members.data?.next_cursor ?? null)}
+                    disabled={working || !current}
+                    onClick={() => {
+                      const next = members?.next_cursor ?? null;
+                      setMemberCursor(next);
+                      void owner.refresh(next, inviteCursor, state.selectionToken);
+                    }}
                   >
                     {t("companyNextMembers")}
                   </Button>
@@ -296,7 +278,8 @@ export function CompanyPage() {
                 className="fields"
                 onSubmit={(event) => {
                   event.preventDefault();
-                  void form.handleSubmit();
+                  // Capture at the DOM event, before the form's awaited validation.
+                  void form.handleSubmit({ owner, selectionToken: state.selectionToken });
                 }}
               >
                 <form.Field name="email">
@@ -308,7 +291,7 @@ export function CompanyPage() {
                         type="email"
                         required
                         maxLength={254}
-                        disabled={working || pending}
+                        disabled={!enabled}
                         value={field.state.value}
                         onBlur={field.handleBlur}
                         onChange={(event) => field.handleChange(event.target.value)}
@@ -323,7 +306,7 @@ export function CompanyPage() {
                       <select
                         id="invitation-role"
                         value={field.state.value}
-                        disabled={working || pending}
+                        disabled={!enabled}
                         onChange={(event) => field.handleChange(selectedRole(event.target.value))}
                       >
                         <option value="User">{t("companyUser")}</option>
@@ -332,41 +315,49 @@ export function CompanyPage() {
                     </div>
                   )}
                 </form.Field>
-                <Button type="submit" disabled={working || pending}>
+                <Button type="submit" disabled={!enabled}>
                   {t("companyInvite")}
                 </Button>
               </form>
-              {invitations.isError ? (
-                <p role="alert">{t(errorMessage(invitations.error))}</p>
-              ) : (
-                invitations.data?.invitations.map((invitation) => (
-                  <fieldset className="record stack" key={invitation.id}>
-                    <legend>{invitation.email}</legend>
-                    <p>
-                      {t(invitationStatus[invitation.status])} · {t(delivery[invitation.delivery])}
-                    </p>
-                    {invitation.status === "Pending" && (
-                      <Button
-                        variant="outline"
-                        disabled={working || pending}
-                        onClick={() => submit(() => client.company_revoke(invitation.id))}
-                      >
-                        {t("companyRevoke")}
-                      </Button>
-                    )}
-                  </fieldset>
-                ))
-              )}
+              {invitations?.invitations.map((invitation) => (
+                <fieldset className="record stack" key={invitation.id}>
+                  <legend>{invitation.email}</legend>
+                  <p>
+                    {t(invitationStatus[invitation.status])} · {t(delivery[invitation.delivery])}
+                  </p>
+                  {invitation.status === "Pending" && (
+                    <Button
+                      variant="outline"
+                      disabled={!enabled}
+                      onClick={() => submit((organization) => organization.revoke(invitation.id))}
+                    >
+                      {t("companyRevoke")}
+                    </Button>
+                  )}
+                </fieldset>
+              ))}
               <div className="actions">
                 {inviteCursor && (
-                  <Button variant="outline" onClick={() => setInviteCursor(null)}>
+                  <Button
+                    variant="outline"
+                    disabled={working || !current}
+                    onClick={() => {
+                      setInviteCursor(null);
+                      void owner.refresh(memberCursor, null, state.selectionToken);
+                    }}
+                  >
                     {t("moduleRefresh")}
                   </Button>
                 )}
-                {!invitations.isError && invitations.data?.next_cursor && (
+                {invitations?.next_cursor && (
                   <Button
                     variant="outline"
-                    onClick={() => setInviteCursor(invitations.data?.next_cursor ?? null)}
+                    disabled={working || !current}
+                    onClick={() => {
+                      const next = invitations?.next_cursor ?? null;
+                      setInviteCursor(next);
+                      void owner.refresh(memberCursor, next, state.selectionToken);
+                    }}
                   >
                     {t("companyNextInvitations")}
                   </Button>
@@ -376,6 +367,53 @@ export function CompanyPage() {
           </Card>
         </div>
       )}
+      {confirmation &&
+        confirmation.owner === owner &&
+        confirmation.selectionToken === state.selectionToken &&
+        current && (
+          <dialog
+            ref={(dialog) => {
+              if (dialog && !dialog.open) dialog.showModal();
+            }}
+            onCancel={(event) => {
+              event.preventDefault();
+              setConfirmation(null);
+            }}
+          >
+            <h3>{t(confirmation.role == null ? "companyRemove" : "companyChangeRole")}</h3>
+            <p>
+              {t("companyChangeHelp", {
+                member: confirmation.member.email ?? confirmation.member.user_id,
+              })}
+            </p>
+            <div className="actions">
+              <Button variant="outline" onClick={() => setConfirmation(null)}>
+                {t("cancel")}
+              </Button>
+              <Button
+                disabled={!enabled}
+                onClick={() => {
+                  const captured = confirmation;
+                  setConfirmation(null);
+                  if (
+                    captured.owner === owner &&
+                    owner.matchesSelection(captured.selectionToken) &&
+                    owner.isCurrent()
+                  )
+                    submit((organization) =>
+                      organization.change_member(
+                        captured.member.user_id,
+                        captured.member.revision,
+                        captured.role,
+                      ),
+                    );
+                }}
+              >
+                {t("companyConfirm")}
+              </Button>
+            </div>
+          </dialog>
+        )}
     </div>
   );
 }
