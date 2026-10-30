@@ -18,6 +18,7 @@ const messages: Readonly<Record<string, SimpleMessageKey>> = {
   vault_storage_full: "storageFull",
   credential_revalidation_required: "revalidationRequired",
   invalid_response: "responseError",
+  organization_context_unavailable: "companyServerRequired",
   personal_context_unavailable: "personalContextServerRequired",
   cancelled: "cancelledError",
   busy: "rateError",
