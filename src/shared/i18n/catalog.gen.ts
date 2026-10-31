@@ -169,11 +169,23 @@ export const en = {
   "connectTitle": "Connect to NDS",
   "connected": "Connected",
   "connecting": "Connecting",
+  "controlCached": "Server unreachable; using policy revision {revision}",
+  "controlChangedElsewhere": "The policy changed elsewhere. Refresh and review it.",
+  "controlDefaultManual": "No server policy observed; manual settings apply.",
+  "controlFromServer": "Server policy, revision {revision}",
+  "controlFullauto": "Full auto",
+  "controlFullautoHint": "Trusted agents run supported system tools on this device without per-tool approval. Git writes, remote display and integrations keep their own settings.",
+  "controlManual": "Manual",
+  "controlManualHint": "Each tool runs only when enabled with its permissions below.",
+  "controlRecentSignIn": "Sign in again to switch this device to full auto.",
+  "controlSave": "Save device control",
+  "controlUnavailable": "This server does not support device control yet.",
   "copySharedClipboard": "Copy shared text",
   "cpuTemperature": "CPU temperature",
   "cpuUsage": "CPU usage",
   "deleted": "Deleted entries",
   "deviceActive": "Active",
+  "deviceControl": "Device control",
   "deviceCreated": "Registered",
   "deviceName": "Device name",
   "deviceRevoked": "Revoked",
@@ -305,6 +317,12 @@ export const en = {
   "providerUnavailable": "The local tool is unavailable.",
   "publishDeviceState": "Publish device, session and module state",
   "publishModuleState": "Publish observed module state",
+  "purposeBuildDevDesktop": "Build and development",
+  "purposeDesktop": "Desktop",
+  "purposeDevDesktop": "Development",
+  "purposeServerDesktop": "Server desktop",
+  "purposeServerDevDesktop": "Server development",
+  "purposeServerHosting": "Server hosting",
   "rateError": "Please wait before trying again.",
   "reachable": "Available",
   "recentAuthenticationRequired": "Sign in again to manage passkeys. Your current session remains valid.",
@@ -610,11 +628,23 @@ export const ru = {
   "connectTitle": "Подключение к NDS",
   "connected": "Подключено",
   "connecting": "Подключение",
+  "controlCached": "Сервер недоступен; используется политика ревизии {revision}",
+  "controlChangedElsewhere": "Политика изменена в другом месте. Обновите и проверьте её.",
+  "controlDefaultManual": "Политика сервера не получена; действуют ручные настройки.",
+  "controlFromServer": "Политика сервера, ревизия {revision}",
+  "controlFullauto": "Полный автомат",
+  "controlFullautoHint": "Доверенные агенты запускают поддерживаемые системные инструменты на этом устройстве без отдельного разрешения. Запись в Git, удалённый экран и интеграции сохраняют свои настройки.",
+  "controlManual": "Вручную",
+  "controlManualHint": "Каждый инструмент работает, только если он включён с разрешениями ниже.",
+  "controlRecentSignIn": "Войдите снова, чтобы включить полный автомат на этом устройстве.",
+  "controlSave": "Сохранить управление устройством",
+  "controlUnavailable": "Этот сервер пока не поддерживает управление устройством.",
   "copySharedClipboard": "Скопировать общий текст",
   "cpuTemperature": "Температура CPU",
   "cpuUsage": "Загрузка CPU",
   "deleted": "Удалено записей",
   "deviceActive": "Активно",
+  "deviceControl": "Управление устройством",
   "deviceCreated": "Зарегистрировано",
   "deviceName": "Имя устройства",
   "deviceRevoked": "Доступ отозван",
@@ -746,6 +776,12 @@ export const ru = {
   "providerUnavailable": "Локальный инструмент недоступен.",
   "publishDeviceState": "Отправить состояние устройства, сессии и модулей",
   "publishModuleState": "Отправить наблюдаемое состояние модулей",
+  "purposeBuildDevDesktop": "Сборка и разработка",
+  "purposeDesktop": "Рабочий стол",
+  "purposeDevDesktop": "Разработка",
+  "purposeServerDesktop": "Серверный рабочий стол",
+  "purposeServerDevDesktop": "Серверная разработка",
+  "purposeServerHosting": "Хостинг сервисов",
   "rateError": "Подождите перед следующей попыткой.",
   "reachable": "Доступен",
   "recentAuthenticationRequired": "Для управления ключами доступа войдите снова. Текущая сессия остаётся действующей.",
@@ -1050,11 +1086,23 @@ export type MessageArgs = {
   "connectTitle": undefined;
   "connected": undefined;
   "connecting": undefined;
+  "controlCached": { "revision": string };
+  "controlChangedElsewhere": undefined;
+  "controlDefaultManual": undefined;
+  "controlFromServer": { "revision": string };
+  "controlFullauto": undefined;
+  "controlFullautoHint": undefined;
+  "controlManual": undefined;
+  "controlManualHint": undefined;
+  "controlRecentSignIn": undefined;
+  "controlSave": undefined;
+  "controlUnavailable": undefined;
   "copySharedClipboard": undefined;
   "cpuTemperature": undefined;
   "cpuUsage": undefined;
   "deleted": undefined;
   "deviceActive": undefined;
+  "deviceControl": undefined;
   "deviceCreated": undefined;
   "deviceName": undefined;
   "deviceRevoked": undefined;
@@ -1186,6 +1234,12 @@ export type MessageArgs = {
   "providerUnavailable": undefined;
   "publishDeviceState": undefined;
   "publishModuleState": undefined;
+  "purposeBuildDevDesktop": undefined;
+  "purposeDesktop": undefined;
+  "purposeDevDesktop": undefined;
+  "purposeServerDesktop": undefined;
+  "purposeServerDevDesktop": undefined;
+  "purposeServerHosting": undefined;
   "rateError": undefined;
   "reachable": undefined;
   "recentAuthenticationRequired": undefined;
