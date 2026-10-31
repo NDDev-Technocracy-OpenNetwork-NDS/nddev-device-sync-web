@@ -100,7 +100,7 @@ export const en = {
   "catalogSavedHelp": "Encrypted observations retained in NDS. Dates show when data was observed, not current GitHub access or freshness.",
   "catalogSavedNext": "Next saved page",
   "catalogSignIn": "Sign in and verify this device to read repositories.",
-  "catalogSourceHelp": "This choice is saved and synchronized across your account. Enable GDS permissions separately on each device.",
+  "catalogSourceHelp": "This choice is saved and synchronized across your account. Enable GitHub module permissions separately on each device.",
   "catalogTimeout": "Repository request timed out. Try again.",
   "catalogTitle": "GitHub repositories",
   "catalogUnavailable": "Repository catalog is unavailable.",
@@ -221,12 +221,12 @@ export const en = {
   "exportUnknown": "Server export policy has not been confirmed.",
   "failed": "Failed entries",
   "freedBytes": "Reclaimed space",
-  "gdsComparisonNotApplicable": "Not applicable",
   "gdsInstall": "GDS installation",
-  "gdsUnavailable": "Not available",
   "genericError": "The operation failed. Try again.",
   "github": "Sign in with GitHub",
+  "githubComparisonNotApplicable": "Not applicable",
   "githubHelp": "Compare this code with the NDS approval page in your browser. Approve only when both codes match.",
+  "githubUnavailable": "Not available",
   "gpuMemory": "GPU memory used",
   "gpuTemperature": "GPU temperature",
   "gpuUsage": "GPU usage",
@@ -330,6 +330,7 @@ export const en = {
   "refreshDevices": "Refresh devices",
   "registerPasskey": "Create passkey",
   "remoteFreshness": "Remote data freshness",
+  "remoteScreen": "Remote screen",
   "repositoryConnect": "Connect checkout",
   "repositoryConnected": "Checkout connected: {path}",
   "repositoryDifferentInstallation": "This checkout belongs to another NDS account or installation.",
@@ -559,7 +560,7 @@ export const ru = {
   "catalogSavedHelp": "Зашифрованные сведения, сохранённые в NDS. Даты показывают время наблюдения, а не текущую актуальность или доступ к GitHub.",
   "catalogSavedNext": "Следующая сохранённая страница",
   "catalogSignIn": "Войдите в аккаунт и подтвердите это устройство для просмотра репозиториев.",
-  "catalogSourceHelp": "Выбор сохраняется и синхронизируется в аккаунте. Разрешения GDS включаются отдельно на каждом устройстве.",
+  "catalogSourceHelp": "Выбор сохраняется и синхронизируется в аккаунте. Разрешения модуля GitHub включаются отдельно на каждом устройстве.",
   "catalogTimeout": "Время ожидания запроса истекло. Повторите запрос.",
   "catalogTitle": "Репозитории GitHub",
   "catalogUnavailable": "Каталог репозиториев недоступен.",
@@ -680,12 +681,12 @@ export const ru = {
   "exportUnknown": "Политика отправки на сервер ещё не подтверждена.",
   "failed": "Не обработано записей",
   "freedBytes": "Освобождено",
-  "gdsComparisonNotApplicable": "Неприменимо",
   "gdsInstall": "Установка GDS",
-  "gdsUnavailable": "Недоступно",
   "genericError": "Не удалось выполнить действие. Повторите попытку.",
   "github": "Войти через GitHub",
+  "githubComparisonNotApplicable": "Неприменимо",
   "githubHelp": "Сравните этот код с кодом на странице подтверждения NDS в браузере. Разрешайте вход, только если коды совпадают.",
+  "githubUnavailable": "Недоступно",
   "gpuMemory": "Использование памяти GPU",
   "gpuTemperature": "Температура GPU",
   "gpuUsage": "Загрузка GPU",
@@ -789,6 +790,7 @@ export const ru = {
   "refreshDevices": "Обновить устройства",
   "registerPasskey": "Создать ключ доступа",
   "remoteFreshness": "Актуальность удалённых данных",
+  "remoteScreen": "Удалённый экран",
   "repositoryConnect": "Подключить репозиторий",
   "repositoryConnected": "Репозиторий подключён: {path}",
   "repositoryDifferentInstallation": "Репозиторий привязан к другому аккаунту или установке NDS.",
@@ -1138,12 +1140,12 @@ export type MessageArgs = {
   "exportUnknown": undefined;
   "failed": undefined;
   "freedBytes": undefined;
-  "gdsComparisonNotApplicable": undefined;
   "gdsInstall": undefined;
-  "gdsUnavailable": undefined;
   "genericError": undefined;
   "github": undefined;
+  "githubComparisonNotApplicable": undefined;
   "githubHelp": undefined;
+  "githubUnavailable": undefined;
   "gpuMemory": undefined;
   "gpuTemperature": undefined;
   "gpuUsage": undefined;
@@ -1247,6 +1249,7 @@ export type MessageArgs = {
   "refreshDevices": undefined;
   "registerPasskey": undefined;
   "remoteFreshness": undefined;
+  "remoteScreen": undefined;
   "repositoryConnect": undefined;
   "repositoryConnected": { "path": string };
   "repositoryDifferentInstallation": undefined;
