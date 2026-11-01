@@ -64,6 +64,7 @@ export const en = {
   "cancel": "Cancel sign-in",
   "cancelledError": "Sign-in cancelled.",
   "catalogAccessEnd": "End of the list available to this credential. Other access scopes may include more repositories.",
+  "catalogAccountIgnored": "This GitHub account is on this device's ignored-account list.",
   "catalogArchived": "Archived",
   "catalogCancelled": "Repository request cancelled.",
   "catalogCapacityReached": "The catalog could not finish updating because synchronization storage reached its limit. Saved observations remain available.",
@@ -74,6 +75,7 @@ export const en = {
   "catalogEmptyPage": "No repositories on this page.",
   "catalogHasMore": "More repositories are available in the next page.",
   "catalogHelp": "Choose a vault record containing a GitHub access token to update the saved catalog. Each request reads one page available to that credential.",
+  "catalogIgnoreListInvalid": "The ignored-account list on this device cannot be read. Nothing is included until it is fixed.",
   "catalogInternal": "Internal",
   "catalogInvalidResponse": "Repository data could not be verified.",
   "catalogLimitReached": "Local page limit reached. GitHub still reports more repositories; this listing is incomplete.",
@@ -84,6 +86,7 @@ export const en = {
   "catalogObservationUnknown": "Observation time is unavailable.",
   "catalogObserved": "Observed: {time}",
   "catalogOrganization": "Organization",
+  "catalogOwnerIgnored": "Ignored on this device by the owner's list. Saved data is kept; it is not discovered, connected or synchronized.",
   "catalogPageScope": "Only repositories available to the selected credential are shown. Each request replaces this page.",
   "catalogPaused": "Repository requests are paused while this app is in the background.",
   "catalogPersonal": "Personal account",
@@ -96,6 +99,8 @@ export const en = {
   "catalogReadSaved": "Refresh saved page",
   "catalogReadSavedAgain": "Refresh the saved catalog and try again.",
   "catalogRefreshCredentials": "Refresh vault records",
+  "catalogRepositoryIgnored": "This repository is on this device's ignored-repository list.",
+  "catalogRepositoryIgnoredLabel": "Ignored on this device",
   "catalogSaved": "Saved catalog",
   "catalogSavedHelp": "Encrypted observations retained in NDS. Dates show when data was observed, not current GitHub access or freshness.",
   "catalogSavedNext": "Next saved page",
@@ -120,6 +125,10 @@ export const en = {
   "clipboardRejected": "This clipboard item is private, unsupported or too large to share. Choose plain text up to 8 KiB.",
   "clipboardUnavailable": "Shared clipboard state could not be refreshed.",
   "code": "Eight-digit code",
+  "collectionDebug": "Diagnostics collection: debug until {until}.",
+  "collectionOff": "Diagnostics collection is off: nothing new is collected or sent.",
+  "collectionStandard": "Diagnostics collection: standard.",
+  "collectionUnknown": "Diagnostics collection policy has not been confirmed.",
   "companyActive": "Active",
   "companyAdmin": "Administrator",
   "companyChangeHelp": "Apply this membership change to {member}? Removing membership closes organization access; personal sessions and data remain separate.",
@@ -195,10 +204,12 @@ export const en = {
   "devicesUnverified": "Device inventory has not been freshly verified.",
   "diagnostics": "Diagnostic logs for five minutes",
   "diagnosticsDegraded": "Diagnostics: rejected {rejected}, dropped {dropped}, write failures {failures}, pending {pending}.",
+  "diagnosticsEmpty": "No diagnostics in the last hour.",
   "diagnosticsHttp": "Network diagnostics",
   "diagnosticsIo": "Local operations",
   "diagnosticsOff": "Stop diagnostic logs",
-  "diagnosticsUnavailable": "Local diagnostics are unavailable. Sign-in can continue.",
+  "diagnosticsTruncated": "Only the newest records are shown.",
+  "diagnosticsUnavailable": "Diagnostics search is unavailable.",
   "diskRead": "Disk read rate",
   "diskTemperature": "Disk temperature",
   "diskWrite": "Disk write rate",
@@ -291,6 +302,7 @@ export const en = {
   "openPasskey": "Open passkey verification",
   "openText": "Read text",
   "operationBusy": "Another operation is in progress or this view changed. Refresh and try again.",
+  "ownDiagnostics": "Show my diagnostics (last hour)",
   "passkey": "Sign in with passkey",
   "passkeyAccountHint": "For passkey sign-in, enter the email address linked to your NDS account. With multiple members, an account must be selected.",
   "passkeyCreated": "Created: {time}",
@@ -524,6 +536,7 @@ export const ru = {
   "cancel": "Отменить вход",
   "cancelledError": "Вход отменён.",
   "catalogAccessEnd": "Конец списка, доступного этим учётным данным. При другом доступе список может содержать больше репозиториев.",
+  "catalogAccountIgnored": "Этот аккаунт GitHub в списке игнорируемых на этом устройстве.",
   "catalogArchived": "Архивный",
   "catalogCancelled": "Запрос репозиториев отменён.",
   "catalogCapacityReached": "Каталог обновлён не полностью: достигнут лимит хранилища синхронизации. Сохранённые сведения остаются доступны.",
@@ -534,6 +547,7 @@ export const ru = {
   "catalogEmptyPage": "На этой странице нет репозиториев.",
   "catalogHasMore": "Следующая страница содержит дополнительные репозитории.",
   "catalogHelp": "Выберите запись vault с токеном GitHub, чтобы обновить сохранённый каталог. Каждый запрос читает одну страницу, доступную этим учётным данным.",
+  "catalogIgnoreListInvalid": "Список игнорируемых аккаунтов на этом устройстве не читается. Пока он не исправлен, ничего не включается.",
   "catalogInternal": "Внутренний",
   "catalogInvalidResponse": "Не удалось проверить данные репозиториев.",
   "catalogLimitReached": "Достигнут локальный лимит страниц. GitHub сообщает о дополнительных репозиториях; этот список неполный.",
@@ -544,6 +558,7 @@ export const ru = {
   "catalogObservationUnknown": "Время наблюдения недоступно.",
   "catalogObserved": "Время наблюдения: {time}",
   "catalogOrganization": "Организация",
+  "catalogOwnerIgnored": "Игнорируется на этом устройстве по списку владельца. Сохранённые данные остаются; аккаунт не обнаруживается, не подключается и не синхронизируется.",
   "catalogPageScope": "Показаны только репозитории, доступные выбранным учётным данным. Каждый запрос заменяет эту страницу.",
   "catalogPaused": "Запросы репозиториев приостановлены, пока приложение находится в фоне.",
   "catalogPersonal": "Личный аккаунт",
@@ -556,6 +571,8 @@ export const ru = {
   "catalogReadSaved": "Обновить сохранённую страницу",
   "catalogReadSavedAgain": "Обновите сохранённый каталог и повторите попытку.",
   "catalogRefreshCredentials": "Обновить записи сейфа",
+  "catalogRepositoryIgnored": "Этот репозиторий в списке игнорируемых на этом устройстве.",
+  "catalogRepositoryIgnoredLabel": "Игнорируется на этом устройстве",
   "catalogSaved": "Сохранённый каталог",
   "catalogSavedHelp": "Зашифрованные сведения, сохранённые в NDS. Даты показывают время наблюдения, а не текущую актуальность или доступ к GitHub.",
   "catalogSavedNext": "Следующая сохранённая страница",
@@ -580,6 +597,10 @@ export const ru = {
   "clipboardRejected": "Этот элемент буфера помечен как приватный, не поддерживается или слишком велик. Выберите обычный текст до 8 КиБ.",
   "clipboardUnavailable": "Не удалось обновить состояние общего буфера.",
   "code": "Восьмизначный код",
+  "collectionDebug": "Сбор диагностики: отладка до {until}.",
+  "collectionOff": "Сбор диагностики выключен: ничего нового не собирается и не отправляется.",
+  "collectionStandard": "Сбор диагностики: стандартный.",
+  "collectionUnknown": "Политика сбора диагностики ещё не подтверждена.",
   "companyActive": "Активен",
   "companyAdmin": "Администратор",
   "companyChangeHelp": "Применить изменение к {member}? Удаление членства закрывает доступ к организации; личные сессии и данные остаются отдельными.",
@@ -655,10 +676,12 @@ export const ru = {
   "devicesUnverified": "Список устройств ещё не подтверждён свежей проверкой.",
   "diagnostics": "Диагностические логи на пять минут",
   "diagnosticsDegraded": "Диагностика: отклонено {rejected}, потеряно {dropped}, ошибок записи {failures}, в очереди {pending}.",
+  "diagnosticsEmpty": "За последний час диагностики нет.",
   "diagnosticsHttp": "Диагностика сети",
   "diagnosticsIo": "Локальные операции",
   "diagnosticsOff": "Отключить диагностические логи",
-  "diagnosticsUnavailable": "Локальная диагностика недоступна. Вход в NDS остаётся доступен.",
+  "diagnosticsTruncated": "Показаны только самые новые записи.",
+  "diagnosticsUnavailable": "Поиск диагностики недоступен.",
   "diskRead": "Чтение диска",
   "diskTemperature": "Температура диска",
   "diskWrite": "Запись диска",
@@ -751,6 +774,7 @@ export const ru = {
   "openPasskey": "Открыть проверку ключа доступа",
   "openText": "Прочитать текст",
   "operationBusy": "Выполняется другая операция или данные изменились. Обновите их и повторите попытку.",
+  "ownDiagnostics": "Показать мою диагностику (за час)",
   "passkey": "Войти с ключом доступа",
   "passkeyAccountHint": "Для входа с ключом доступа укажите email вашего аккаунта NDS. Если участников несколько, необходимо выбрать аккаунт.",
   "passkeyCreated": "Создан: {time}",
@@ -983,6 +1007,7 @@ export type MessageArgs = {
   "cancel": undefined;
   "cancelledError": undefined;
   "catalogAccessEnd": undefined;
+  "catalogAccountIgnored": undefined;
   "catalogArchived": undefined;
   "catalogCancelled": undefined;
   "catalogCapacityReached": undefined;
@@ -993,6 +1018,7 @@ export type MessageArgs = {
   "catalogEmptyPage": undefined;
   "catalogHasMore": undefined;
   "catalogHelp": undefined;
+  "catalogIgnoreListInvalid": undefined;
   "catalogInternal": undefined;
   "catalogInvalidResponse": undefined;
   "catalogLimitReached": undefined;
@@ -1003,6 +1029,7 @@ export type MessageArgs = {
   "catalogObservationUnknown": undefined;
   "catalogObserved": { "time": string };
   "catalogOrganization": undefined;
+  "catalogOwnerIgnored": undefined;
   "catalogPageScope": undefined;
   "catalogPaused": undefined;
   "catalogPersonal": undefined;
@@ -1015,6 +1042,8 @@ export type MessageArgs = {
   "catalogReadSaved": undefined;
   "catalogReadSavedAgain": undefined;
   "catalogRefreshCredentials": undefined;
+  "catalogRepositoryIgnored": undefined;
+  "catalogRepositoryIgnoredLabel": undefined;
   "catalogSaved": undefined;
   "catalogSavedHelp": undefined;
   "catalogSavedNext": undefined;
@@ -1039,6 +1068,10 @@ export type MessageArgs = {
   "clipboardRejected": undefined;
   "clipboardUnavailable": undefined;
   "code": undefined;
+  "collectionDebug": { "until": string };
+  "collectionOff": undefined;
+  "collectionStandard": undefined;
+  "collectionUnknown": undefined;
   "companyActive": undefined;
   "companyAdmin": undefined;
   "companyChangeHelp": { "member": string };
@@ -1114,9 +1147,11 @@ export type MessageArgs = {
   "devicesUnverified": undefined;
   "diagnostics": undefined;
   "diagnosticsDegraded": { "rejected": string; "dropped": string; "failures": string; "pending": string };
+  "diagnosticsEmpty": undefined;
   "diagnosticsHttp": undefined;
   "diagnosticsIo": undefined;
   "diagnosticsOff": undefined;
+  "diagnosticsTruncated": undefined;
   "diagnosticsUnavailable": undefined;
   "diskRead": undefined;
   "diskTemperature": undefined;
@@ -1210,6 +1245,7 @@ export type MessageArgs = {
   "openPasskey": undefined;
   "openText": undefined;
   "operationBusy": undefined;
+  "ownDiagnostics": undefined;
   "passkey": undefined;
   "passkeyAccountHint": undefined;
   "passkeyCreated": { "time": string };
