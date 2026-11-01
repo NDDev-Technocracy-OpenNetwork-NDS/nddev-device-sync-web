@@ -1,4 +1,9 @@
-import { client_diagnostics, configure_debug, type ExportPolicy } from "@nds/runtime";
+import {
+  client_diagnostics,
+  configure_debug,
+  type DeliveryCollection,
+  type ExportPolicy,
+} from "@nds/runtime";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
@@ -13,6 +18,12 @@ const policy: Record<ExportPolicy, SimpleMessageKey> = {
   Unknown: "exportUnknown",
   Enabled: "exportEnabled",
   Disabled: "exportDisabled",
+};
+// The device's effective collection policy (P2); debug carries its end.
+const collection: Record<Exclude<DeliveryCollection, "Debug">, SimpleMessageKey> = {
+  Unknown: "collectionUnknown",
+  Standard: "collectionStandard",
+  Off: "collectionOff",
 };
 
 export function DiagnosticsPage() {
@@ -91,6 +102,13 @@ export function DiagnosticsPage() {
           </CardHeader>
           <CardContent className="stack">
             <p>{t(policy[delivery.policy])}</p>
+            <p>
+              {delivery.collection === "Debug"
+                ? t("collectionDebug", {
+                    until: formatTimestamp(delivery.debug_expires_at * 1000n, locale),
+                  })
+                : t(collection[delivery.collection])}
+            </p>
             <nav className="actions" aria-label={t("moduleDiagnostics")}>
               <Link to="/incidents">{t("alertsTitle")}</Link>
             </nav>
