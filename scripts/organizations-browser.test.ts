@@ -83,6 +83,7 @@ test("real organizations preserve the personal Vault and retry the exact lost-AC
   try {
     browser = await chromium.launch({
       headless: true,
+      chromiumSandbox: true,
       ...(process.env.NDS_TEST_CHROMIUM ? { executablePath: process.env.NDS_TEST_CHROMIUM } : {}),
     });
     const context = await browser.newContext({ locale: "en-US" });
@@ -153,6 +154,51 @@ test("real organizations preserve the personal Vault and retry the exact lost-AC
     await page.getByRole("link", { name: "Organizations", exact: true }).waitFor();
     const principal = await page.locator("dl dd").first().innerText();
     assert.ok(principal);
+    // The same real browser can qualify the diagnostics UI when the owning
+    // server fixture also has its real collector/OpenObserve route configured.
+    if (process.env.NDS_TEST_DIAGNOSTICS === "1") {
+      await page.getByRole("link", { name: "Diagnostics", exact: true }).click();
+      const show = page.getByRole("button", {
+        name: "Show my diagnostics (last hour)",
+        exact: true,
+      });
+      let found = false;
+      for (let attempt = 0; attempt < 8 && !found; attempt++) {
+        const received = page.waitForResponse(
+          (response) =>
+            new URL(response.url()).pathname === "/v2/observability/search" &&
+            response.request().method() === "POST",
+        );
+        await show.click();
+        const response = await received;
+        assert.equal(response.status(), 200);
+        const request: unknown = response.request().postDataJSON();
+        assert.ok(object(request));
+        assert.equal(request.scope, "member");
+        assert.equal(request.signal, "logs");
+        assert.equal(request.limit, 50);
+        const result: unknown = await response.json();
+        assert.ok(object(result) && Array.isArray(result.records));
+        assert.ok(result.records.length <= 50);
+        for (const record of result.records) {
+          assert.ok(object(record));
+          assert.equal(record.user_id, principal);
+        }
+        const recordCount = result.records.length;
+        if (recordCount > 0) {
+          await until(
+            async () => (await page?.locator("section.record h3").count()) === recordCount,
+          );
+          found = true;
+        } else {
+          await delay(2000);
+        }
+      }
+      assert.ok(found, "signed own diagnostic records must reach the actual UI");
+      assert.equal(await page.getByRole("alert").count(), 0);
+      await page.getByRole("link", { name: "NDS session", exact: true }).click();
+      assert.equal(await page.locator("dl dd").first().innerText(), principal);
+    }
     const marker = `multispace-witness-${randomUUID()}`;
     await page.getByRole("link", { name: "Vault and sync", exact: true }).click();
     await page.locator("#record-title").fill(marker);
