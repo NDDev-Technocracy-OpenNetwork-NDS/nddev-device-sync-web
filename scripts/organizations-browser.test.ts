@@ -5,7 +5,13 @@ import { createHash, randomUUID } from "node:crypto";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 import { setTimeout as delay } from "node:timers/promises";
-import { type Browser, chromium, type Page, type Request } from "playwright";
+import {
+  type Browser,
+  type Response as BrowserResponse,
+  chromium,
+  type Page,
+  type Request,
+} from "playwright";
 import { object } from "./inputs";
 
 function loopback(value: unknown): string {
@@ -164,13 +170,13 @@ test("real organizations preserve the personal Vault and retry the exact lost-AC
       });
       let found = false;
       for (let attempt = 0; attempt < 8 && !found; attempt++) {
-        const received = page.waitForResponse(
+        const received: Promise<BrowserResponse> = page.waitForResponse(
           (response) =>
             new URL(response.url()).pathname === "/v2/observability/search" &&
             response.request().method() === "POST",
         );
         await show.click();
-        const response = await received;
+        const response: BrowserResponse = await received;
         assert.equal(response.status(), 200);
         const request: unknown = response.request().postDataJSON();
         assert.ok(object(request));
