@@ -47,6 +47,12 @@ export function DiagnosticsPage() {
   const local = read.data?.local;
   const delivery = read.data?.delivery;
   const count = (value: bigint | null) => value?.toString() ?? t("notChecked");
+  const at = (value: string) => {
+    const milliseconds = Date.parse(value);
+    return Number.isSafeInteger(milliseconds)
+      ? formatTimestamp(BigInt(milliseconds), locale)
+      : t("notChecked");
+  };
   return (
     <div className="page-grid">
       <Card>
@@ -131,12 +137,12 @@ export function DiagnosticsPage() {
             {!own.isError && own.data?.records.map((record, index) => (
               <section className="record stack" key={`${record.timestamp}-${record.operation_id}-${index}`}>
                 <h3>{record.event_name || record.name || record.service_name}</h3>
-                <p>{new Date(record.timestamp).toLocaleString(locale)} · {record.service_name}</p>
+                <p>{at(record.timestamp)} · {record.service_name}</p>
                 <p>{[record.module, record.outcome, record.error_type].filter(Boolean).join(" · ")}</p>
                 {record.operation_id && <p>{record.operation_id}</p>}
               </section>
             ))}
-            {own.data?.truncated && <p role="status">{t("diagnosticsTruncated")}</p>}
+            {!own.isError && own.data?.truncated && <p role="status">{t("diagnosticsTruncated")}</p>}
 
             <p>{delivery.initialized ? t("telemetryInitialized") : t("telemetryUnavailable")}</p>
             {delivery.local_persistence_ready !== null && (
