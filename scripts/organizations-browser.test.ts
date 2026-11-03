@@ -80,6 +80,7 @@ test("real organizations preserve the personal Vault and retry the exact lost-AC
     errors: string[] = [],
     hashes: string[] = [];
   const statuses: { method: string; status: number }[] = [];
+  const diagnosticReads: { status: number; body: unknown }[] = [];
   const reconnects = new WeakSet<Request>();
   let lostAcknowledgement = false;
   let verifiedConnections = 0;
@@ -111,6 +112,25 @@ test("real organizations preserve the personal Vault and retry the exact lost-AC
       if (url.origin !== origin) {
         forbidden.push(url.origin);
         await route.abort();
+        return;
+      }
+      if (
+        process.env.NDS_TEST_DIAGNOSTICS === "1" &&
+        url.pathname === "/v2/observability/search" &&
+        request.method() === "POST"
+      ) {
+        // Read the actual authenticated reply before forwarding its exact bytes.
+        // DevTools can omit bodies for browser-owned streamed fetches.
+        const response = await route.fetch({ timeout: 15000 });
+        try {
+          const bytes = await response.body();
+          assert.ok(bytes.length <= 65536);
+          assert.ok(diagnosticReads.length < 8);
+          diagnosticReads.push({ status: response.status(), body: JSON.parse(bytes.toString()) });
+          await route.fulfill({ response });
+        } finally {
+          await response.dispose();
+        }
         return;
       }
       if (url.pathname === "/v3/organizations" && request.method() === "POST") {
@@ -183,7 +203,9 @@ test("real organizations preserve the personal Vault and retry the exact lost-AC
         assert.equal(request.scope, "member");
         assert.equal(request.signal, "logs");
         assert.equal(request.limit, 50);
-        const result: unknown = await response.json();
+        const observed = await until(async () => diagnosticReads[attempt] ?? false);
+        assert.equal(observed.status, 200);
+        const result = observed.body;
         assert.ok(object(result) && Array.isArray(result.records));
         assert.ok(result.records.length <= 50);
         for (const record of result.records) {
