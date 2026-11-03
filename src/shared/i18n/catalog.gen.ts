@@ -47,6 +47,7 @@ export const en = {
   "browserSwitchDisabled": "Disabled",
   "browserSwitchEnabled": "Enabled",
   "browserTabCount": "Tabs: {count}",
+  "browserUpdateRequired": "Update the browser extension and its host to compatible versions before running browser work.",
   "browserVaultHelp": "Your vault opens automatically after sign-in. Changes are stored encrypted in this browser and synchronize through the server. Keep this browser’s site data until all changes are synchronized.",
   "cacheAssemblyInvalid": "Cache configuration is invalid for this app.",
   "cacheBindTools": "Use cache for downloads",
@@ -414,8 +415,8 @@ export const en = {
   "systemInfo": "System information",
   "telemetryDelivery": "Queued {pending} · Received {delivered} · Lost {dropped} · Attempts failed {failures}",
   "telemetryInitialized": "Client delivery is active. Received counts confirm server acceptance.",
-  "telemetryPersistenceReady": "Browser log storage has confirmed writes.",
-  "telemetryPersistenceUnavailable": "Durable browser log storage has not confirmed a successful write. Unstored events can be lost when this page closes.",
+  "telemetryPersistenceReady": "Local diagnostic storage has confirmed a successful write.",
+  "telemetryPersistenceUnavailable": "Local diagnostic storage has not confirmed a successful write. Unstored events can be lost when this app or page closes.",
   "telemetryUnavailable": "Client delivery is unavailable; local diagnostics remain active.",
   "textPreviewLimit": "Text preview, up to 16 KiB.",
   "thisDevice": "This installation",
@@ -519,6 +520,7 @@ export const ru = {
   "browserSwitchDisabled": "Выключен",
   "browserSwitchEnabled": "Включён",
   "browserTabCount": "Вкладок: {count}",
+  "browserUpdateRequired": "Обновите расширение и службу браузера до совместимых версий перед запуском браузерных задач.",
   "browserVaultHelp": "Vault открывается автоматически после входа. Изменения хранятся в браузере в зашифрованном виде и синхронизируются через сервер. Сохраняйте данные сайта, пока все изменения не синхронизированы.",
   "cacheAssemblyInvalid": "Настройка кеша для этого приложения недействительна.",
   "cacheBindTools": "Загружать через кеш",
@@ -886,8 +888,8 @@ export const ru = {
   "systemInfo": "Состояние системы",
   "telemetryDelivery": "В очереди {pending} · Принято {delivered} · Потеряно {dropped} · Неудачных попыток {failures}",
   "telemetryInitialized": "Доставка клиента активна. Счётчик подтверждает приём сервером.",
-  "telemetryPersistenceReady": "Запись журналов в хранилище браузера подтверждена.",
-  "telemetryPersistenceUnavailable": "Успешная запись журналов в постоянное хранилище браузера не подтверждена. Несохранённые события могут потеряться при закрытии страницы.",
+  "telemetryPersistenceReady": "Запись журналов в локальное хранилище подтверждена.",
+  "telemetryPersistenceUnavailable": "Успешная запись журналов в локальное хранилище не подтверждена. Несохранённые события могут потеряться при закрытии приложения или страницы.",
   "telemetryUnavailable": "Доставка клиента недоступна; локальная диагностика работает.",
   "textPreviewLimit": "Предпросмотр текста, до 16 КиБ.",
   "thisDevice": "Эта установка",
@@ -990,6 +992,7 @@ export type MessageArgs = {
   "browserSwitchDisabled": undefined;
   "browserSwitchEnabled": undefined;
   "browserTabCount": { "count": string };
+  "browserUpdateRequired": undefined;
   "browserVaultHelp": undefined;
   "cacheAssemblyInvalid": undefined;
   "cacheBindTools": undefined;
