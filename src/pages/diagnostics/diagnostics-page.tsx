@@ -38,9 +38,30 @@ export function DiagnosticsPage() {
     }),
     refetchInterval: 1000,
   });
+  const own = useQuery({
+    queryKey: ["own-diagnostics", scope],
+    queryFn: () => client.diagnostic_search("", false, 60, 50),
+    enabled: false,
+    retry: false,
+  });
+  // The stored projection has no row ID. Keep identical occurrences, with keys
+  // stable across reordering of other records in this read-only snapshot.
+  const occurrences = new Map<string, number>();
+  const records = own.data?.records.map((record) => {
+    const identity = JSON.stringify(record);
+    const occurrence = occurrences.get(identity) ?? 0;
+    occurrences.set(identity, occurrence + 1);
+    return { record, key: `${identity}:${occurrence}` };
+  });
   const local = read.data?.local;
   const delivery = read.data?.delivery;
   const count = (value: bigint | null) => value?.toString() ?? t("notChecked");
+  const at = (value: string) => {
+    const milliseconds = Date.parse(value);
+    return Number.isSafeInteger(milliseconds)
+      ? formatTimestamp(BigInt(milliseconds), locale)
+      : t("notChecked");
+  };
   return (
     <div className="page-grid">
       <Card>
@@ -112,6 +133,35 @@ export function DiagnosticsPage() {
             <nav className="actions" aria-label={t("moduleDiagnostics")}>
               <Link to="/incidents">{t("alertsTitle")}</Link>
             </nav>
+            <Button
+              variant="outline"
+              disabled={busy || own.isFetching}
+              onClick={() => {
+                void own.refetch();
+              }}
+            >
+              {t("ownDiagnostics")}
+            </Button>
+            {own.isFetching && <p role="status">{t("working")}</p>}
+            {own.isError && <p role="alert">{t(errorMessage(own.error))}</p>}
+            {!own.isError && own.data?.records.length === 0 && <p>{t("diagnosticsEmpty")}</p>}
+            {!own.isError &&
+              records?.map(({ record, key }) => (
+                <section className="record stack" key={key}>
+                  <h3>{record.event_name || record.name || record.service_name}</h3>
+                  <p>
+                    {at(record.timestamp)} · {record.service_name}
+                  </p>
+                  <p>
+                    {[record.module, record.outcome, record.error_type].filter(Boolean).join(" · ")}
+                  </p>
+                  {record.operation_id && <p>{record.operation_id}</p>}
+                </section>
+              ))}
+            {!own.isError && own.data?.truncated && (
+              <p role="status">{t("diagnosticsTruncated")}</p>
+            )}
+
             <p>{delivery.initialized ? t("telemetryInitialized") : t("telemetryUnavailable")}</p>
             {delivery.local_persistence_ready !== null && (
               <p>
