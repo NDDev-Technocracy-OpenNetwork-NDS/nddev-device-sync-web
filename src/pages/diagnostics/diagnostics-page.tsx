@@ -76,9 +76,18 @@ export function DiagnosticsPage() {
           {local?.sink_initialized === false && <p role="alert">{t("diagnosticsUnavailable")}</p>}
           {!read.isError && local && (
             <>
-              <p data-local-collection={local.collection_enabled === null ? "unknown" : String(local.collection_enabled)}>
-                {t(local.collection_enabled === true ? "diagnosticsCollectionActive" :
-                   local.collection_enabled === false ? "diagnosticsCollectionOff" : "diagnosticsCollectionUnknown")}
+              <p
+                data-local-collection={
+                  local.collection_enabled === null ? "unknown" : String(local.collection_enabled)
+                }
+              >
+                {t(
+                  local.collection_enabled === true
+                    ? "diagnosticsCollectionActive"
+                    : local.collection_enabled === false
+                      ? "diagnosticsCollectionOff"
+                      : "diagnosticsCollectionUnknown",
+                )}
               </p>
               <p>
                 {t("diagnosticsDegraded", {
