@@ -127,7 +127,7 @@ export const en = {
   "clipboardUnavailable": "Shared clipboard state could not be refreshed.",
   "code": "Eight-digit code",
   "collectionDebug": "Diagnostics collection: debug until {until}.",
-  "collectionOff": "Diagnostics collection is off: nothing new is collected or sent.",
+  "collectionOff": "Diagnostics policy: off.",
   "collectionStandard": "Diagnostics collection: standard.",
   "collectionUnknown": "Diagnostics collection policy has not been confirmed.",
   "companyActive": "Active",
@@ -204,6 +204,9 @@ export const en = {
   "devicesTitle": "Your devices",
   "devicesUnverified": "Device inventory has not been freshly verified.",
   "diagnostics": "Diagnostic logs for five minutes",
+  "diagnosticsCollectionActive": "Diagnostic collection is active in this app.",
+  "diagnosticsCollectionOff": "Diagnostic collection is off in this app.",
+  "diagnosticsCollectionUnknown": "Diagnostic collection in this app has not been confirmed.",
   "diagnosticsDegraded": "Diagnostics: rejected {rejected}, dropped {dropped}, write failures {failures}, pending {pending}.",
   "diagnosticsEmpty": "No diagnostics in the last hour.",
   "diagnosticsHttp": "Network diagnostics",
@@ -600,7 +603,7 @@ export const ru = {
   "clipboardUnavailable": "Не удалось обновить состояние общего буфера.",
   "code": "Восьмизначный код",
   "collectionDebug": "Сбор диагностики: отладка до {until}.",
-  "collectionOff": "Сбор диагностики выключен: ничего нового не собирается и не отправляется.",
+  "collectionOff": "Политика диагностики: выключено.",
   "collectionStandard": "Сбор диагностики: стандартный.",
   "collectionUnknown": "Политика сбора диагностики ещё не подтверждена.",
   "companyActive": "Активен",
@@ -677,6 +680,9 @@ export const ru = {
   "devicesTitle": "Ваши устройства",
   "devicesUnverified": "Список устройств ещё не подтверждён свежей проверкой.",
   "diagnostics": "Диагностические логи на пять минут",
+  "diagnosticsCollectionActive": "Сбор диагностики в этом приложении включён.",
+  "diagnosticsCollectionOff": "Сбор диагностики в этом приложении выключен.",
+  "diagnosticsCollectionUnknown": "Сбор диагностики в этом приложении не подтверждён.",
   "diagnosticsDegraded": "Диагностика: отклонено {rejected}, потеряно {dropped}, ошибок записи {failures}, в очереди {pending}.",
   "diagnosticsEmpty": "За последний час диагностики нет.",
   "diagnosticsHttp": "Диагностика сети",
@@ -1149,6 +1155,9 @@ export type MessageArgs = {
   "devicesTitle": undefined;
   "devicesUnverified": undefined;
   "diagnostics": undefined;
+  "diagnosticsCollectionActive": undefined;
+  "diagnosticsCollectionOff": undefined;
+  "diagnosticsCollectionUnknown": undefined;
   "diagnosticsDegraded": { "rejected": string; "dropped": string; "failures": string; "pending": string };
   "diagnosticsEmpty": undefined;
   "diagnosticsHttp": undefined;
