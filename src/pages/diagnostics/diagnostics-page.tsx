@@ -76,6 +76,19 @@ export function DiagnosticsPage() {
           {local?.sink_initialized === false && <p role="alert">{t("diagnosticsUnavailable")}</p>}
           {!read.isError && local && (
             <>
+              <p
+                data-local-collection={
+                  local.collection_enabled === null ? "unknown" : String(local.collection_enabled)
+                }
+              >
+                {t(
+                  local.collection_enabled === true
+                    ? "diagnosticsCollectionActive"
+                    : local.collection_enabled === false
+                      ? "diagnosticsCollectionOff"
+                      : "diagnosticsCollectionUnknown",
+                )}
+              </p>
               <p>
                 {t("diagnosticsDegraded", {
                   rejected: count(local.rejected_fields_or_events),
@@ -89,7 +102,7 @@ export function DiagnosticsPage() {
                   <select
                     aria-label={t("moduleDiagnostics")}
                     value={local.debug_scope ?? debugScope}
-                    disabled={busy || local.debug_enabled}
+                    disabled={busy || local.debug_enabled || local.collection_enabled !== true}
                     onChange={(event) => {
                       if (event.target.value === "Http" || event.target.value === "Io")
                         setDebugScope(event.target.value);
@@ -99,7 +112,7 @@ export function DiagnosticsPage() {
                     <option value="Io">{t("diagnosticsIo")}</option>
                   </select>
                   <Button
-                    disabled={busy}
+                    disabled={busy || local.collection_enabled !== true}
                     onClick={() => {
                       void run(async () =>
                         configure_debug(debugScope, local.debug_enabled ? 0 : 300),
@@ -162,7 +175,10 @@ export function DiagnosticsPage() {
               <p role="status">{t("diagnosticsTruncated")}</p>
             )}
 
-            <p>{delivery.initialized ? t("telemetryInitialized") : t("telemetryUnavailable")}</p>
+            {!delivery.initialized && <p>{t("telemetryUnavailable")}</p>}
+            {delivery.initialized && delivery.policy === "Enabled" && !delivery.paused && (
+              <p>{t("telemetryInitialized")}</p>
+            )}
             {delivery.local_persistence_ready !== null && (
               <p>
                 {delivery.local_persistence_ready

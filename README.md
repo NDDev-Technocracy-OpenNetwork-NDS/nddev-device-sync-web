@@ -16,6 +16,10 @@ The catalog saves the explicit GitHub choice through the shared encrypted Rust
 Vault. Reopening restores the choice; clearing it does not need GitHub access.
 Device permissions remain separate, and conflicted source settings stay blocked.
 
+The diagnostics screen shows local SDK collection separately from the policy and
+delivery status. The browser uses the shared authenticated policy and preserves a
+confirmed Off state when a later policy fetch returns Unknown.
+
 ## Build
 
 Use Bun/Node from `package.json` and `rust-toolchain.toml` with the
