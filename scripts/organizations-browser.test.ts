@@ -178,7 +178,9 @@ test("real organizations preserve the personal Vault and retry the exact lost-AC
     await page.locator("#signin-code").fill(code);
     await page.getByRole("button", { name: "Verify code", exact: true }).click();
     await page.getByRole("link", { name: "Organizations", exact: true }).waitFor();
-    const principal = await page.locator("dl dd").first().innerText();
+    const principalField = page.locator("dl dd").first();
+    await principalField.waitFor({ state: "visible" });
+    const principal = await principalField.textContent();
     assert.ok(principal);
     // The same real browser can qualify the diagnostics UI when the owning
     // server fixture also has its real collector/OpenObserve route configured.
@@ -225,7 +227,8 @@ test("real organizations preserve the personal Vault and retry the exact lost-AC
       assert.ok(found, "signed own diagnostic records must reach the actual UI");
       assert.equal(await page.getByRole("alert").count(), 0);
       await page.getByRole("link", { name: "NDS session", exact: true }).click();
-      assert.equal(await page.locator("dl dd").first().innerText(), principal);
+      await principalField.waitFor({ state: "visible" });
+      assert.equal(await principalField.textContent(), principal);
     }
     const marker = `multispace-witness-${randomUUID()}`;
     await page.getByRole("link", { name: "Vault and sync", exact: true }).click();
@@ -243,7 +246,8 @@ test("real organizations preserve the personal Vault and retry the exact lost-AC
     assert.equal(await selector.inputValue(), "");
     const original = await selector.locator("option").nth(1).getAttribute("value");
     assert.ok(original);
-    const label = await selector.locator("option").nth(1).innerText();
+    const label = await selector.locator("option").nth(1).textContent();
+    assert.ok(label);
     const name = label.split(" · ")[0];
     assert.ok(name);
     await page.locator("#organization-name").fill(name);
@@ -277,7 +281,8 @@ test("real organizations preserve the personal Vault and retry the exact lost-AC
     await page.getByRole("link", { name: "Vault and sync", exact: true }).click();
     await page.locator(".record strong").filter({ hasText: marker }).waitFor();
     await page.getByRole("link", { name: "NDS session", exact: true }).click();
-    assert.equal(await page.locator("dl dd").first().innerText(), principal);
+    await principalField.waitFor({ state: "visible" });
+    assert.equal(await principalField.textContent(), principal);
     assert.deepEqual(forbidden, []);
     assert.deepEqual(errors, []);
     await context.close();

@@ -232,7 +232,9 @@ test("offline updates preserve waiting and installing builds; repairs are verifi
     } finally {
       await context.setOffline(false);
     }
-    assert.equal(await page.locator("h1").innerText(), "Owned shell");
+    const heading = page.locator("h1");
+    await heading.waitFor({ state: "visible" });
+    assert.equal(await heading.textContent(), "Owned shell");
     const cache = await currentCache(page);
     assert.equal(cache, `nds-shell-${artifact(4).build}`);
     t.diagnostic("activation during the next install preserves its complete offline shell");
