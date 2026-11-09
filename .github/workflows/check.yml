@@ -34,16 +34,12 @@ jobs:
           bun-version-file: package.json
       - name: Install pinned Rust toolchain
         run: rustup toolchain install 1.99.1 --profile minimal --target wasm32-unknown-unknown
-      - name: Install the exact matched wasm-bindgen asset
+      - name: Prepare the exact native tool assets
         uses: NDDev-Technocracy-OpenNetwork/nddev-ci/actions/release-assets@0c513d80a5ddb9ea6b3b6da0068547c2003e637c
         with:
-          manifest: .github/wasm-tools.json
-          directory: ${{ runner.temp }}/web-wasm-tools
+          manifest: .github/native-tools.json
+          directory: ${{ runner.temp }}/web-native-tools
           add-to-path: true
-      - uses: taiki-e/install-action@c509219cf42fba86913069efd0ade2458c59337b
-        with:
-          tool: just@1.59.0
-          fallback: none
       - name: Prepare locked source inputs without compiling
         run: just setup
       - name: Run the STD-0004 native contract
