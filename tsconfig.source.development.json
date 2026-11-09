@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./src/*"],
+      "@nds/runtime": ["./bindings/development/nds_native.d.ts"]
+    }
+  }
+}

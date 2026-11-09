@@ -15,6 +15,14 @@ manifest-verified static assets, never API responses. Browser secrets stay in th
 protected accounts adapter, never presentation DTOs, React/Query state or logs. A failed
 read must not mark a revision as loaded.
 
+`just setup` prepares source inputs without compilation. `just check` validates
+both compiler-produced declaration profiles, TypeScript and canonical presentation
+bytes; it runs no tests, Rust/WASM/worker compilation or application build. Source
+checks use prepared immutable checkouts and must not invoke prepare_native.py or
+Cargo. `just test`, `just build` and `just verify` run on execution hosts or runners.
+Keep generated binding provenance and the actual compiler drift gate together.
+The explicit CI `bindings` mode produces source inputs; it does not qualify an app.
+
 Public code is AGPL-3.0-only. No credentials, private topology or runtime evidence. Run
 actual browser offline acceptance as well as build/analysis; report exact platform
-coverage. Signed work -> dev -> main PRs. No implicit release/deploy.
+coverage. Merge task PRs into dev; main advances to its verified commit. No implicit release/deploy.
