@@ -39,19 +39,12 @@ jobs:
           bun-version-file: package.json
       - name: Install pinned Rust toolchain
         run: rustup toolchain install 1.99.1 --profile minimal --target wasm32-unknown-unknown
-      - name: Install pinned wasm tooling
-        env:
-          WASM_BINDGEN_VERSION: 0.2.129
-          # GitHub-recorded digest of the upstream wasm-bindgen-0.2.129-x86_64-unknown-linux-musl.tar.gz
-          WASM_BINDGEN_SHA256: 82d12bb940e2d4e72e0d5605387fc1b8ca179044e012b620f0ce4e7440e8320e
-        run: |
-          set -euo pipefail
-          name="wasm-bindgen-${WASM_BINDGEN_VERSION}-x86_64-unknown-linux-musl"
-          curl --fail --location --retry 3 --max-time 120 --output "$RUNNER_TEMP/$name.tar.gz" \
-            "https://github.com/wasm-bindgen/wasm-bindgen/releases/download/${WASM_BINDGEN_VERSION}/$name.tar.gz"
-          echo "${WASM_BINDGEN_SHA256}  $RUNNER_TEMP/$name.tar.gz" | sha256sum --check --strict
-          tar -xzf "$RUNNER_TEMP/$name.tar.gz" -C "$RUNNER_TEMP"
-          echo "$RUNNER_TEMP/$name" >> "$GITHUB_PATH"
+      - name: Install the exact matched wasm-bindgen asset
+        uses: NDDev-Technocracy-OpenNetwork/nddev-ci/actions/release-assets@0c513d80a5ddb9ea6b3b6da0068547c2003e637c
+        with:
+          manifest: .github/wasm-tools.json
+          directory: ${{ runner.temp }}/web-wasm-tools
+          add-to-path: true
       - uses: taiki-e/install-action@c509219cf42fba86913069efd0ade2458c59337b
         with:
           tool: just@1.59.0
@@ -86,19 +79,12 @@ jobs:
         with:
           bun-version-file: package.json
       - run: rustup toolchain install 1.99.1 --profile minimal --target wasm32-unknown-unknown
-      - name: Install pinned wasm tooling
-        env:
-          WASM_BINDGEN_VERSION: 0.2.129
-          # GitHub-recorded digest of the upstream wasm-bindgen-0.2.129-x86_64-unknown-linux-musl.tar.gz
-          WASM_BINDGEN_SHA256: 82d12bb940e2d4e72e0d5605387fc1b8ca179044e012b620f0ce4e7440e8320e
-        run: |
-          set -euo pipefail
-          name="wasm-bindgen-${WASM_BINDGEN_VERSION}-x86_64-unknown-linux-musl"
-          curl --fail --location --retry 3 --max-time 120 --output "$RUNNER_TEMP/$name.tar.gz" \
-            "https://github.com/wasm-bindgen/wasm-bindgen/releases/download/${WASM_BINDGEN_VERSION}/$name.tar.gz"
-          echo "${WASM_BINDGEN_SHA256}  $RUNNER_TEMP/$name.tar.gz" | sha256sum --check --strict
-          tar -xzf "$RUNNER_TEMP/$name.tar.gz" -C "$RUNNER_TEMP"
-          echo "$RUNNER_TEMP/$name" >> "$GITHUB_PATH"
+      - name: Install the exact matched wasm-bindgen asset
+        uses: NDDev-Technocracy-OpenNetwork/nddev-ci/actions/release-assets@0c513d80a5ddb9ea6b3b6da0068547c2003e637c
+        with:
+          manifest: .github/wasm-tools.json
+          directory: ${{ runner.temp }}/web-wasm-tools
+          add-to-path: true
       - run: bun install --frozen-lockfile --ignore-scripts
       - run: bun run build
         if: ${{ !inputs.bindings }}
