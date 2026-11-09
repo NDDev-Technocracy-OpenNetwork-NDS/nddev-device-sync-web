@@ -3,50 +3,27 @@ name: NDS checks
 on:
   pull_request:
     branches: [main, dev]
+    types: [opened, synchronize, reopened, labeled]
   workflow_dispatch:
 
-permissions:
-  contents: read
+permissions: {}
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-env:
-  GH_TOKEN: ${{ github.token }}
-
 jobs:
   quality:
-    runs-on: ubuntu-26.04
-    timeout-minutes: 45
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-        with:
-          persist-credentials: false
-      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
-        with:
-          python-version: '3.15.2'
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
-        with:
-          node-version-file: package.json
-      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6
-        with:
-          bun-version-file: package.json
-      - name: Install pinned Rust toolchain
-        run: rustup toolchain install 1.99.1 --profile minimal --target wasm32-unknown-unknown
-      - name: Prepare the exact native tool assets
-        uses: NDDev-Technocracy-OpenNetwork/nddev-ci/actions/release-assets@0c513d80a5ddb9ea6b3b6da0068547c2003e637c
-        with:
-          manifest: .github/native-tools.json
-          directory: ${{ runner.temp }}/web-native-tools
-          add-to-path: true
-      - name: Prepare locked source inputs without compiling
-        run: just setup
-      - name: Run the STD-0004 native contract
-        id: native
-        uses: NDDev-Technocracy-Standarts/std-0004-ci-cd-workflows/.github/actions/ci@c192c6adcf22088abf456635de614d42e8fa3f8d # nddev-cicd-v0.6.20
-      - name: Require complete native results
-        if: ${{ !cancelled() }}
-        env:
-          STATUS: ${{ steps.native.outputs.status }}
-        run: test "$STATUS" = success
+    permissions:
+      contents: read
+    uses: NDDev-Technocracy-OpenNetwork/nddev-ci/.github/workflows/check.yml@f535b95d053fb1b225fce9a21d055599c6446a22
+    with:
+      timeout-minutes: 45
+      setup: true
+      node-version: '26.13.0'
+      python-version: '3.15.2'
+      bun-version: '1.4.4'
+      rust-version: '1.99.1'
+      rust-components: rustfmt,clippy
+      rust-targets: wasm32-unknown-unknown
+      tool-assets: .github/native-tools.json

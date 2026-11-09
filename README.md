@@ -52,6 +52,13 @@ provenance. The source producer can run while application checks fail on the old
 contract; its result alone is not application acceptance. Normal full CI must
 then pass with `bindings` disabled. Keep the matched library/CLI family intact.
 
+The public workflows call the pinned public `nddev-ci` library with explicit
+hosted SDK inputs. They run the same `just check`/`just test` or `just verify`
+commands, including the real worker and both assembly profiles. A separate clean
+job retains production artifact validation and the explicit declaration producer.
+The former native-result bundle is retired; command diagnostics remain in the
+workflow log and worker JUnit output stays in `.nddev-reports/web.xml`.
+
 The worker acceptance uses the Node and Playwright versions pinned in `package.json`. Run
 `bunx playwright install chromium` and
 `just worker-check`.

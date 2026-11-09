@@ -4,7 +4,7 @@ import { execFileSync } from "node:child_process";
 import { copyFileSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { root, sources } from "./inputs";
+import { object, root, sources } from "./inputs";
 import { bindingInputs, checkCompiledBindings, readBindingContract } from "./rust-bindings";
 
 const { shared } = sources({ prepare: false });
@@ -48,17 +48,23 @@ const damagedMark = Buffer.from(originalMark);
 damagedMark[0] = (damagedMark[0] ?? 0) ^ 1;
 try {
   writeFileSync(mark, damagedMark);
-  assert.throws(() =>
-    execFileSync("bun", ["run", "scripts/generate-presentation.ts", "--check"], {
-      cwd: root,
-      stdio: "pipe",
-      timeout: 30_000,
-    }),
+  assert.throws(
+    () =>
+      execFileSync("bun", ["run", "scripts/generate-presentation.ts", "--check"], {
+        cwd: root,
+        stdio: "pipe",
+        timeout: 30_000,
+      }),
+    (error: unknown) =>
+      object(error) &&
+      Buffer.isBuffer(error.stderr) &&
+      error.stderr.toString().includes("Canonical presentation asset drift: public/nddev-mark.svg"),
   );
   assert.ok(readFileSync(mark).equals(damagedMark), "check must not repair its input");
 } finally {
   writeFileSync(mark, originalMark);
 }
+assert.ok(readFileSync(mark).equals(originalMark));
 console.log(
   "Actual inputs: source/profile/provenance/payload refusal, compiler drift and read-only assets passed",
 );
