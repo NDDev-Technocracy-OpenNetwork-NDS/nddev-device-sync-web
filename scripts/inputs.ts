@@ -37,7 +37,7 @@ export function readObject(path: string): Record<string, unknown> {
   if (!object(value)) throw new Error(`Expected JSON object: ${path}`);
   return value;
 }
-function checkout(repository: string, commit: string, override?: string): string {
+function checkout(repository: string, commit: string, override?: string, prepare = true): string {
   if (
     !/^NDDev-Technocracy-OpenNetwork-NDS\/[a-z0-9-]+$/.test(repository) ||
     !/^[a-f0-9]{40}$/.test(commit)
@@ -48,6 +48,7 @@ function checkout(repository: string, commit: string, override?: string): string
     ? resolve(override)
     : resolve(root, ".nds-cache", repository.split("/")[1] ?? "", commit);
   if (!existsSync(resolve(path, ".git"))) {
+    if (!prepare) throw new Error("Missing pinned source input; run just setup");
     if (override || existsSync(path))
       throw new Error("Source directory is not an owned Git checkout");
     mkdirSync(path, { recursive: true });
@@ -64,11 +65,16 @@ function checkout(repository: string, commit: string, override?: string): string
   }
   return path;
 }
-export function sources(): { shared: string; design: string; designCommit: string } {
+export function sources(options: { prepare?: boolean } = {}): {
+  shared: string;
+  design: string;
+  designCommit: string;
+} {
   const shared = checkout(
     inputs.shared.repository,
     inputs.shared.commit,
     process.env.NDS_SHARED_SOURCE,
+    options.prepare ?? true,
   );
   const provenance = readObject(resolve(shared, "generated/launcher-provenance.json"));
   const source = provenance.source;
@@ -78,6 +84,7 @@ export function sources(): { shared: string; design: string; designCommit: strin
     "NDDev-Technocracy-OpenNetwork-NDS/nddev-opennetwork-design-system",
     source.commit,
     process.env.NDS_DESIGN_SOURCE,
+    options.prepare ?? true,
   );
   return { shared, design, designCommit: source.commit };
 }
