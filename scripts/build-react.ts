@@ -4,16 +4,22 @@ import { dirname, join, resolve } from "node:path";
 import assembly from "../assembly.lock.json";
 import type { Asset } from "./assets";
 import { object, root, run, sources } from "./inputs";
+import { bindingInputs, captureBindings } from "./rust-bindings";
 
 const development = process.argv.includes("--development-http");
-if (process.argv.slice(2).some((arg) => arg !== "--development-http"))
+const bindingsOnly = process.argv.includes("--bindings-only");
+if (process.argv.slice(2).some((arg) => !["--development-http", "--bindings-only"].includes(arg)))
   throw new Error("Unknown build option");
 const assemblyDirty = Boolean(run("git", ["status", "--porcelain"]));
-if (assemblyDirty && !development) throw new Error("Production assembly must be committed");
+if (assemblyDirty && (!development || bindingsOnly))
+  throw new Error("Production assembly and generated-source producers must be committed");
 const source = assemblyDirty ? "unknown" : run("git", ["rev-parse", "HEAD"]);
 const { shared, designCommit } = sources();
-run("bun", ["run", "check:worker"]);
-run("bun", ["run", "scripts/generate-presentation.ts"]);
+if (!bindingsOnly) {
+  run("bun", ["run", "check:worker"]);
+  run("bun", ["run", "scripts/generate-presentation.ts"]);
+}
+const bindingInput = bindingInputs(shared, development);
 const rust = resolve(shared, "packages/nds_native/rust");
 const prepare = resolve(shared, "packages/nds_native/tool/prepare_native.py");
 const environment: Record<string, string> = { NDS_SOURCE_COMMIT: assembly.shared.commit };
@@ -57,19 +63,22 @@ for (const name of [
 ])
   packageMetadata(name);
 const bindgen = packageMetadata("wasm-bindgen").version;
-if (run("wasm-bindgen", ["--version"]) !== `wasm-bindgen ${bindgen}`)
+if (
+  bindgen !== bindingInput.wasm_bindgen ||
+  run("wasm-bindgen", ["--version"]) !== `wasm-bindgen ${bindgen}`
+)
   throw new Error("wasm-bindgen CLI differs from Cargo.lock");
 cargo([
   "build",
   "--locked",
   "--lib",
   "--target",
-  "wasm32-unknown-unknown",
+  bindingInput.rust_target,
   "--jobs",
   "4",
   "--no-default-features",
   "--features",
-  `browser-bindings${development ? ",development-http" : ""}`,
+  bindingInput.features.join(","),
   ...(development ? [] : ["--release"]),
 ]);
 const pkg = resolve(root, "public/pkg");
@@ -81,8 +90,15 @@ run("wasm-bindgen", [
   pkg,
   "--out-name",
   "nds_native",
-  resolve(target, "wasm32-unknown-unknown", development ? "debug" : "release", "nds_native.wasm"),
+  resolve(target, bindingInput.rust_target, bindingInput.rust_profile, "nds_native.wasm"),
 ]);
+captureBindings(
+  bindingInput,
+  join(pkg, "nds_native.d.ts"),
+  source,
+  run("python3", [prepare, "--", "rustc", "--version"], root, environment),
+);
+if (bindingsOnly) process.exit(0);
 mkdirSync(resolve(root, "src/shared/api/generated"), { recursive: true });
 copyFileSync(
   join(pkg, "nds_native.d.ts"),

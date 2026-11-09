@@ -4,6 +4,11 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      bindings:
+        description: Generate both actual Rust/WASM declaration profiles for source preparation
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -57,6 +62,7 @@ jobs:
         run: test "$STATUS" = success
 
   artifact:
+    if: ${{ !cancelled() && (needs.contract.result == 'success' || (github.event_name == 'workflow_dispatch' && inputs.bindings)) }}
     runs-on: ubuntu-26.04
     timeout-minutes: 45
     needs: [contract]
@@ -89,4 +95,20 @@ jobs:
           echo "$RUNNER_TEMP/$name" >> "$GITHUB_PATH"
       - run: bun install --frozen-lockfile --ignore-scripts
       - run: bun run build
+        if: ${{ !inputs.bindings }}
       - run: python3 scripts/check-artifact.py build/react
+        if: ${{ !inputs.bindings }}
+      - name: Generate actual production WASM declarations
+        if: ${{ inputs.bindings }}
+        run: bun run build --bindings-only
+      - name: Generate actual development WASM declarations
+        if: ${{ inputs.bindings }}
+        run: bun run build --bindings-only --development-http
+      - name: Retain generated source inputs
+        if: ${{ inputs.bindings }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: web-source-bindings-${{ github.sha }}
+          path: .build/source-bindings/
+          if-no-files-found: error
+          retention-days: 7
