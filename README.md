@@ -24,13 +24,33 @@ confirmed Off state when a later policy fetch returns Unknown.
 
 Use Bun/Node from `package.json` and `rust-toolchain.toml` with the
 `wasm32-unknown-unknown` target, and the `wasm-bindgen` CLI version recorded in the
-shared Rust lockfile. Run `bun install --frozen-lockfile --ignore-scripts`,
-`just check` and `just build`. Builds require committed source and reject generated
+shared Rust lockfile. Run `just setup`, `just check`, `just test` and `just build`.
+Only setup and source checks belong on a source-only machine; tests and builds
+run on execution hosts or runners. Builds require committed source and reject generated
 drift. Sources are fetched by immutable SHA into `.nds-cache`; optional
 `NDS_SHARED_SOURCE`/`NDS_DESIGN_SOURCE` paths must be clean at those exact commits.
-WASM declarations are generated per compiled binary before TypeScript checks;
-profile-specific runtime exports are build artifacts. `just check` prepares a
-development artifact, while `just build` validates the production artifact.
+`just setup` prepares locked packages, pinned source checkouts, canonical assets
+and the verified production declarations for the editor without invoking Cargo.
+`just check` runs lint, compiler analysis of both actual Rust/WASM declaration
+profiles, and read-only presentation drift checks. It compiles no worker, WASM
+or application and executes no tests. Missing or mismatched inputs fail clearly.
+
+`bindings/` contains the exact compiler-produced development and production
+declarations, source/profile receipts and immutable artifact provenance. They
+are generated inputs, never handwritten API definitions. Every application build
+still generates its declarations from the real selected WASM binary and compares
+them byte-for-byte before checking the runtime types. `just test` retains real
+organization/worker acceptance, source-input refusal/read-only qualification and
+the development assembly; `just build` validates the production artifact.
+
+To refresh declarations after an intentional Rust input change, commit that
+selection and run `main-ci.yml` on its branch with the boolean `bindings` input.
+That explicit input-generation mode produces both real Rust/WASM profiles and
+retains `web-source-bindings-<source SHA>`. Verify repository/run/source, archive
+digest and complete profile receipts before updating the generated contracts and
+provenance. The source producer can run while application checks fail on the old
+contract; its result alone is not application acceptance. Normal full CI must
+then pass with `bindings` disabled. Keep the matched library/CLI family intact.
 
 The worker acceptance uses the Node and Playwright versions pinned in `package.json`. Run
 `bunx playwright install chromium` and

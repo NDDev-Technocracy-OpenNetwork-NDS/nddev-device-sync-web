@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "kind": "generated-rust-wasm-source-inputs",
+  "repository": "NDDev-Technocracy-OpenNetwork-NDS/nddev-device-sync-web",
+  "repository_id": 1415869300,
+  "source_commit": "33d7a843cc537ddb10503caa260b8c8a85716f45",
+  "workflow_run_id": 42565012070,
+  "artifact_id": 13651322372,
+  "archive_sha256": "68e11b161d08ba68cdacfc41397300df092b81e1fc8d218a241d440950862324"
+}

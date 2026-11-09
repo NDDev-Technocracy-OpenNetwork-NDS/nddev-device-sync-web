@@ -4,7 +4,7 @@ import { dirname, join, resolve } from "node:path";
 import assembly from "../assembly.lock.json";
 import type { Asset } from "./assets";
 import { object, root, run, sources } from "./inputs";
-import { bindingInputs, captureBindings } from "./rust-bindings";
+import { bindingInputs, captureBindings, checkCompiledBindings } from "./rust-bindings";
 
 const development = process.argv.includes("--development-http");
 const bindingsOnly = process.argv.includes("--bindings-only");
@@ -99,6 +99,7 @@ captureBindings(
   run("python3", [prepare, "--", "rustc", "--version"], root, environment),
 );
 if (bindingsOnly) process.exit(0);
+checkCompiledBindings(bindingInput, join(pkg, "nds_native.d.ts"));
 mkdirSync(resolve(root, "src/shared/api/generated"), { recursive: true });
 copyFileSync(
   join(pkg, "nds_native.d.ts"),
@@ -106,7 +107,7 @@ copyFileSync(
 );
 for (const file of readdirSync(pkg)) if (file.endsWith(".d.ts")) rmSync(join(pkg, file));
 run("bun", ["run", "build:ui"]);
-run("bun", ["run", "typecheck"]);
+run("bun", ["run", "typecheck:runtime"]);
 const output = resolve(root, "build/react");
 copyFileSync(
   resolve(packageMetadata("nddev-device-sync-vault").path, "src/browser_worker.js"),

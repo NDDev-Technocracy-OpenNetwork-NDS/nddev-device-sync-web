@@ -47,6 +47,12 @@ jobs:
           echo "${WASM_BINDGEN_SHA256}  $RUNNER_TEMP/$name.tar.gz" | sha256sum --check --strict
           tar -xzf "$RUNNER_TEMP/$name.tar.gz" -C "$RUNNER_TEMP"
           echo "$RUNNER_TEMP/$name" >> "$GITHUB_PATH"
+      - uses: taiki-e/install-action@c509219cf42fba86913069efd0ade2458c59337b
+        with:
+          tool: just@1.59.0
+          fallback: none
+      - name: Prepare locked source inputs without compiling
+        run: just setup
       - name: Run the STD-0004 native contract
         id: native
         uses: NDDev-Technocracy-Standarts/std-0004-ci-cd-workflows/.github/actions/ci@c192c6adcf22088abf456635de614d42e8fa3f8d # nddev-cicd-v0.6.20

@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "kind": "generated-rust-wasm-declarations",
+  "inputs": {
+    "schema_version": 1,
+    "shared_repository": "NDDev-Technocracy-OpenNetwork-NDS/nddev-device-sync-desktop",
+    "shared_source_commit": "edde047d4b34205605428c4f2e489b2bc8d0a88b",
+    "assembly_lock_sha256": "ddf8746382690c46b7cdd3d2facededa3a4bf3fb724aa1a5c50b4f1a79df8bd3",
+    "rust_toolchain_sha256": "943607327d044b62f023f1e052eeb14077ac73c26cdc5f2c2bb2b16c548f5d5a",
+    "rust_lock_sha256": "8df4763878e6c2110a18bf6a5becb74a526efc80b647db8ef7c60875ba463e2b",
+    "rust_channel": "1.99.1",
+    "wasm_bindgen": "0.2.129",
+    "rust_target": "wasm32-unknown-unknown",
+    "rust_profile": "debug",
+    "default_features": false,
+    "features": [
+      "browser-bindings",
+      "development-http"
+    ]
+  },
+  "declaration_sha256": "ae32d42e285d430dfc37a96652a1549b348b922997215756a537ca176e221fbe",
+  "declaration_bytes": 25569,
+  "compiler_rust": "rustc 1.99.1 (58cf8f9c3 2026-10-13)",
+  "producer_source_commit": "33d7a843cc537ddb10503caa260b8c8a85716f45",
+  "producer_repository": "NDDev-Technocracy-OpenNetwork-NDS/nddev-device-sync-web",
+  "producer_run_id": "42565012070"
+}
