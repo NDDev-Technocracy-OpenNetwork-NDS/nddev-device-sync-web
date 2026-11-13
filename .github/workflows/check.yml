@@ -16,7 +16,7 @@ jobs:
   quality:
     permissions:
       contents: read
-    uses: NDDev-Technocracy-OpenNetwork/nddev-ci/.github/workflows/check.yml@1a409d4ee632eb594e58a6b291ce9e5a0ef51da2 # v0.6.37
+    uses: NDDev-Technocracy-OpenNetwork/nddev-ci/.github/workflows/check.yml@9fead1382c452a6b791a0a9e464ac6ac66537ac3 # v0.6.51
     with:
       timeout-minutes: 45
       setup: true
