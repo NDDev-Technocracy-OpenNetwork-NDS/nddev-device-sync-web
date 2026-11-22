@@ -20,7 +20,7 @@ jobs:
   contract:
     permissions:
       contents: read
-    uses: NDDev-Technocracy-OpenNetwork/nddev-ci/.github/workflows/check.yml@534b2785b49d5d36d074902aa9eefcb5786d898a # v0.6.83
+    uses: NDDev-Technocracy-OpenNetwork/nddev-ci/.github/workflows/check.yml@6d2cdfdf3edba130dada52a8046b8a8e9f089204 # v0.6.97
     with:
       timeout-minutes: 45
       setup: true
@@ -56,7 +56,7 @@ jobs:
           bun-version-file: package.json
       - run: rustup toolchain install 1.99.1 --profile minimal --target wasm32-unknown-unknown
       - name: Prepare the exact native tool assets
-        uses: NDDev-Technocracy-OpenNetwork/nddev-ci/actions/release-assets@534b2785b49d5d36d074902aa9eefcb5786d898a # v0.6.83
+        uses: NDDev-Technocracy-OpenNetwork/nddev-ci/actions/release-assets@6d2cdfdf3edba130dada52a8046b8a8e9f089204 # v0.6.97
         with:
           manifest: .github/native-tools.json
           directory: ${{ runner.temp }}/web-native-tools
